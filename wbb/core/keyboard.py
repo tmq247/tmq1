@@ -29,10 +29,10 @@ from wbb.utils.functions import get_urls_from_text as is_url
 
 def keyboard(buttons_list, row_width: int = 2):
     """
-    Buttons builder, pass buttons in a list and it will
-    return pyrogram.types.IKB object
-    Ex: keyboard([["click here", "https://google.com"]])
-    if theres, a url, it will make url button, else callback button
+    Trình tạo nút, chuyển các nút trong danh sách và nó sẽ
+    trả lại đối tượng pyrogram.types.IKB
+    Ví dụ: bàn phím([["bấm vào đây", "https://google.com"]])
+    nếu có, một url, nó sẽ tạo nút url, nếu không thì nút gọi lại
     """
     buttons = InlineKeyboard(row_width=row_width)
     data = [
@@ -49,7 +49,7 @@ def keyboard(buttons_list, row_width: int = 2):
 
 def ikb(data: dict, row_width: int = 2):
     """
-    Converts a dict to pyrogram buttons
-    Ex: dict_to_keyboard({"click here": "this is callback data"})
+  Chuyển đổi một dict thành các nút pyrogram
+    Ví dụ: dict_to_keyboard({"bấm vào đây": "đây là dữ liệu gọi lại"})
     """
     return keyboard(data.items(), row_width=row_width)
