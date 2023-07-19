@@ -54,14 +54,14 @@ from wbb.utils.stickerset import (
 __MODULE__ = "Stickers"
 __HELP__ = """
 /sticker_id
-    To get FileID of a Sticker.
+    Để lấy FileID của Sticker.
 /get_sticker
-    To get sticker as a photo and document.
+   Để lấy nhãn dán dưới dạng ảnh và tài liệu.
 /kang
-    To kang a Sticker or an Image."""
+   Để tạo một Nhãn dán hoặc Hình ảnh."""
 
 MAX_STICKERS = (
-    120  # would be better if we could fetch this limit directly from telegram
+    120  # sẽ tốt hơn nếu chúng ta có thể lấy giới hạn này trực tiếp từ telegram
 )
 SUPPORTED_TYPES = ["jpeg", "png", "webp"]
 
@@ -72,10 +72,10 @@ async def sticker_id(_, message: Message):
     reply = message.reply_to_message
 
     if not reply:
-        return await message.reply("Reply to a sticker.")
+        return await message.reply("Trả lời nhãn dán.")
 
     if not reply.sticker:
-        return await message.reply("Reply to a sticker.")
+        return await message.reply("Trả lời nhãn dán.")
 
     await message.reply_text(f"`{reply.sticker.file_id}`")
 
@@ -86,10 +86,10 @@ async def sticker_image(_, message: Message):
     r = message.reply_to_message
 
     if not r:
-        return await message.reply("Reply to a sticker.")
+        return await message.reply("Trả lời nhãn dán.")
 
     if not r.sticker:
-        return await message.reply("Reply to a sticker.")
+        return await message.reply("Trả lời nhãn dán.")
 
     m = await message.reply("Sending..")
     f = await r.download(f"{r.sticker.file_unique_id}.png")
@@ -144,9 +144,9 @@ async def userbot_kang(_, message: Message):
 @capture_err
 async def kang(client, message: Message):
     if not message.reply_to_message:
-        return await message.reply_text("Reply to a sticker/image to kang it.")
+        return await message.reply_text("Trả lời nhãn dán/hình ảnh cho kang it.")
     if not message.from_user:
-        return await message.reply_text("You are anon admin, kang stickers in my pm.")
+        return await message.reply_text("Bạn là quản trị viên anon, kang dán vào pm của tôi.")
     msg = await message.reply_text("Kanging Sticker..")
 
     # Find the proper emoji
@@ -170,7 +170,7 @@ async def kang(client, message: Message):
             )
         elif doc:
             if doc.file_size > 10000000:
-                return await msg.edit("File size too large.")
+                return await msg.edit("Kích thước tệp quá lớn.")
 
             temp_file_path = await app.download_media(doc)
             image_type = imghdr.what(temp_file_path)
@@ -179,9 +179,9 @@ async def kang(client, message: Message):
             try:
                 temp_file_path = await resize_file_to_sticker_size(temp_file_path)
             except OSError as e:
-                await msg.edit_text("Something wrong happened.")
+                await msg.edit_text("Đã xảy ra sự cố.")
                 raise Exception(
-                    f"Something went wrong while resizing the sticker (at {temp_file_path}); {e}"
+                    f"Đã xảy ra lỗi khi thay đổi kích thước nhãn dán (tại {temp_file_path}); {e}"
                 )
             sticker = await create_sticker(
                 await upload_document(client, temp_file_path, message.chat.id),
@@ -190,9 +190,9 @@ async def kang(client, message: Message):
             if os.path.isfile(temp_file_path):
                 os.remove(temp_file_path)
         else:
-            return await msg.edit("Nope, can't kang that.")
+            return await msg.edit("Không, không thể kang đó.")
     except ShortnameOccupyFailed:
-        await message.reply_text("Change Your Name Or Username")
+        await message.reply_text("Thay đổi tên hoặc tên người dùng của bạn")
         return
 
     except Exception as e:
@@ -236,7 +236,7 @@ async def kang(client, message: Message):
                 try:
                     await add_sticker_to_set(client, stickerset, sticker)
                 except StickerEmojiInvalid:
-                    return await msg.edit("[ERROR]: INVALID_EMOJI_IN_ARGUMENT")
+                    return await msg.edit("[LỖI]: INVALID_EMOJI_IN_ARGUMENT")
             limit += 1
             break
 
@@ -250,12 +250,12 @@ async def kang(client, message: Message):
             [[InlineKeyboardButton(text="Start", url=f"t.me/{BOT_USERNAME}")]]
         )
         await msg.edit(
-            "You Need To Start A Private Chat With Me.",
+            "Bạn cần bắt đầu trò chuyện riêng với tôi.",
             reply_markup=keyboard,
         )
     except StickerPngNopng:
         await message.reply_text(
-            "Stickers must be png files but the provided image was not a png"
+            "Hình dán phải là tệp png nhưng hình ảnh được cung cấp không phải là png"
         )
     except StickerPngDimensions:
-        await message.reply_text("The sticker png dimensions are invalid.")
+        await message.reply_text("Kích thước png nhãn dán không hợp lệ.")
