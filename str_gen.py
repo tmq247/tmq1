@@ -1,13 +1,13 @@
 from pyrogram import Client as c
 
-API_ID = input("\nEnter Your API_ID:\n > ")
-API_HASH = input("\nEnter Your API_HASH:\n > ")
+API_ID = input("\nNhập API_ID của bạn:\n > ")
+API_HASH = input("\nNhập API_HASH của bạn:\n > ")
 
-print("\n\n Enter Phone number when asked.\n\n")
+print("\n\n Nhập số điện thoại khi được hỏi.\n\n")
 
 i = c("wbb", api_id=API_ID, api_hash=API_HASH, in_memory=True)
 
 with i:
     ss = i.export_session_string()
-    print("\nHERE IS YOUR STRING SESSION, COPY IT, DON'T SHARE!!\n")
+    print("\nĐÂY LÀ PHIÊN CHUỖI CỦA BẠN, SAO CHÉP NÓ, KHÔNG CHIA SẺ!!\n")
     print(f"\n{ss}\n")
