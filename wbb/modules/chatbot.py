@@ -57,16 +57,16 @@ async def chat_bot_toggle(message: Message, is_userbot: bool):
     if status == "enable":
         if chat_id not in db:
             await add_chatbot(chat_id, is_userbot=is_userbot)
-            text = "Chatbot Enabled!"
+            text = "Đã bật Chatbot!"
             return await eor(message, text=text)
-        await eor(message, text="ChatBot Is Already Enabled.")
+        await eor(message, text="ChatBot đã được kích hoạt.")
     elif status == "disable":
         if chat_id in db:
             await rm_chatbot(chat_id, is_userbot=is_userbot)
-            return await eor(message, text="Chatbot Disabled!")
-        await eor(message, text="ChatBot Is Already Disabled.")
+            return await eor(message, text="Chatbot bị vô hiệu hóa!")
+        await eor(message, text="ChatBot đã bị vô hiệu hóa.")
     else:
-        await eor(message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]")
+        await eor(message, text="**Cách sử dụng:**\n/chatbot [ENABLE|DISABLE]")
 
 
 # Enabled | Disable Chatbot
@@ -76,7 +76,7 @@ async def chat_bot_toggle(message: Message, is_userbot: bool):
 @capture_err
 async def chatbot_status(_, message: Message):
     if len(message.command) != 2:
-        return await eor(message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]")
+        return await eor(message, text="**Cách sử dụng:**\n/chatbot [ENABLE|DISABLE]")
     await chat_bot_toggle(message, is_userbot=False)
 
 
@@ -126,7 +126,7 @@ async def chatbot_talk(_, message: Message):
 async def chatbot_status_ubot(_, message: Message):
     if len(message.text.split()) != 2:
         return await eor(
-            message, text=f"**Usage:**\n{USERBOT_PREFIX}chatbot [ENABLE|DISABLE]"
+            message, text=f"**Cách sử dụng:**\n{USERBOT_PREFIX}chatbot [ENABLE|DISABLE]"
         )
     await chat_bot_toggle(message, is_userbot=True)
 
