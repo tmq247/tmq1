@@ -52,23 +52,23 @@ from wbb.utils.functions import extract_user, extract_user_and_reason, restart
 
 __MODULE__ = "Sudoers"
 __HELP__ = """
-/stats - To Check System Status.
+/stats - Để kiểm tra trạng thái hệ thống.
 
-/gstats - To Check Bot's Global Stats.
+/gstats - Để kiểm tra số liệu thống kê toàn cầu của Bot.
 
-/gban - To Ban A User Globally.
+/gban - Để cấm một người dùng trên toàn cầu.
 
-/clean_db - Clean database.
+/clean_db - Cơ sở dữ liệu sạch.
 
-/broadcast - To Broadcast A Message To All Groups.
+/broadcast - Để phát một tin nhắn cho tất cả các nhóm.
 
-/ubroadcast - To Broadcast A Message To All Users.
+/ubroadcast - Để phát một tin nhắn cho tất cả người dùng.
 
-/update - To Update And Restart The Bot
+/update - Để cập nhật và khởi động lại bot
 
-/eval - Execute Python Code
+/eval - Thực thi mã Python
 
-/sh - Execute Shell Code
+/sh -Thực thi mã Shell
 """
 
 
@@ -82,7 +82,7 @@ async def bot_sys_stats():
     disk = psutil.disk_usage("/").percent
     process = psutil.Process(os.getpid())
     stats = f"""
-{USERBOT_USERNAME}@William
+{USERBOT_USERNAME}@coihaycoc
 ------------------
 UPTIME: {formatter.get_readable_time(bot_uptime)}
 BOT: {round(process.memory_info()[0] / 1024 ** 2)} MB
@@ -104,17 +104,17 @@ async def ban_globally(_, message):
     from_user = message.from_user
 
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if not reason:
-        return await message.reply("No reason provided.")
+        return await message.reply("Không có lý do cung cấp.")
 
     if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS:
-        return await message.reply_text("I can't ban that user.")
+        return await message.reply_text("Tôi không thể cấm người dùng đó.")
 
     served_chats = await get_served_chats()
     m = await message.reply_text(
-        f"**Banning {user.mention} Globally!**"
-        + f" **This Action Should Take About {len(served_chats)} Seconds.**"
+        f"**Cấm {user.mention} trên toàn cầu!**"
+        + f" **Hành động này sẽ mất khoảng {len(serve_chats)} giây.**"
     )
     await add_gban_user(user_id)
     number_of_chats = 0
@@ -130,12 +130,12 @@ async def ban_globally(_, message):
     try:
         await app.send_message(
             user.id,
-            f"Hello, You have been globally banned by {from_user.mention},"
-            + " You can appeal for this ban by talking to him.",
+            f"Xin chào, Bạn đã bị cấm trên toàn cầu bởi {from_user.mention},"
+            + " Bạn có thể khiếu nại lệnh cấm này bằng cách nói chuyện với anh ta.",
         )
     except Exception:
         pass
-    await m.edit(f"Banned {user.mention} Globally!")
+    await m.edit(f"Bị cấm {user.mention} trên toàn cầu!")
     ban_text = f"""
 __**New Global Ban**__
 **Origin:** {message.chat.title} [`{message.chat.id}`]
@@ -151,12 +151,12 @@ __**New Global Ban**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"Banned {user.mention} Globally!\nAction Log: {m2.link}",
+            f"Đã cấm {user.mention} trên toàn cầu!\nNhật ký hành động: {m2.link}",
             disable_web_page_preview=True,
         )
     except Exception:
         await message.reply_text(
-            "User Gbanned, But This Gban Action Wasn't Logged, Add Me In GBAN_LOG_GROUP"
+            "Người dùng bị Gban, nhưng hành động Gban này không được đăng nhập, hãy thêm tôi vào GBAN_LOG_GROUP"
         )
 
 
@@ -168,15 +168,15 @@ __**New Global Ban**__
 async def unban_globally(_, message):
     user_id = await extract_user(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     user = await app.get_users(user_id)
 
     is_gbanned = await is_gbanned_user(user.id)
     if not is_gbanned:
-        await message.reply_text("I don't remember Gbanning him.")
+        await message.reply_text("Tôi không nhớ Gbanning anh ấy.")
     else:
         await remove_gban_user(user.id)
-        await message.reply_text(f"Lifted {user.mention}'s Global Ban.'")
+        await message.reply_text(f"Đã dỡ bỏ lệnh cấm toàn cầu của {user.mention}.'")
 
 
 # Broadcast
@@ -196,7 +196,7 @@ async def broadcast_message(_, message):
     schats = await get_served_chats()
     chats = [int(chat["chat_id"]) for chat in schats]
     m = await message.reply_text(
-        f"Broadcast in progress, will take {len(chats) * sleep_time} seconds."
+        f"Đang phát, sẽ mất {len(chats) * sleep_time} giây."
     )
     for i in chats:
         try:
@@ -211,7 +211,7 @@ async def broadcast_message(_, message):
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
-    await m.edit(f"**Broadcasted Message In {sent} Chats.**")
+    await m.edit(f"**Tin nhắn quảng bá trong cuộc trò chuyện {sent}.**")
 
 
 # Update
@@ -222,11 +222,11 @@ async def update_restart(_, message):
     try:
         out = subprocess.check_output(["git", "pull"]).decode("UTF-8")
         if "Already up to date." in str(out):
-            return await message.reply_text("Its already up-to date!")
+            return await message.reply_text("Nó đã được cập nhật!")
         await message.reply_text(f"```{out}```")
     except Exception as e:
         return await message.reply_text(str(e))
-    m = await message.reply_text("**Updated with default branch, restarting now.**")
+    m = await message.reply_text("**Đã cập nhật với nhánh mặc định, đang khởi động lại.**")
     await restart(m)
 
 
@@ -245,7 +245,7 @@ async def broadcast_message(_, message):
         reply_markup = InlineKeyboardMarkup(reply_message.reply_markup.inline_keyboard)
 
     m = await message.reply_text(
-        f"Broadcast in progress, will take {len(chats) * sleep_time} seconds."
+        f"Đang phát, sẽ mất {len(chats) * sleep_time} giây."
     )
 
     for i in chats:
@@ -261,4 +261,4 @@ async def broadcast_message(_, message):
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
-    await m.edit(f"**Broadcasted Message to {sent} Users.**")
+    await m.edit(f"**Phát tin nhắn tới {send} người dùng.**")
