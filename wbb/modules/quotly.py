@@ -32,11 +32,11 @@ from wbb.core.decorators.errors import capture_err
 
 __MODULE__ = "Quotly"
 __HELP__ = """
-/q - To quote a message.
-/q [INTEGER] - To quote more than 1 messages.
-/q r - to quote a message with it's reply
+/q - Để trích dẫn một tin nhắn.
+/q [INTEGER] - Để trích dẫn nhiều hơn 1 tin nhắn.
+/q r - để trích dẫn một tin nhắn với nó trả lời
 
-Use .q to quote using userbot
+Sử dụng .q để báo giá bằng userbot
 """
 
 
@@ -74,10 +74,10 @@ def isArgInt(message: Message) -> list:
 @capture_err
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:
-        return await message.reply_text("Reply to a message to quote it.")
+        return await message.reply_text("Trả lời tin nhắn để trích dẫn nó.")
     if not message.reply_to_message.text:
-        return await message.reply_text("Replied message has no text, can't quote it.")
-    m = await message.reply_text("Quoting Messages")
+        return await message.reply_text("Tin nhắn trả lời không có văn bản, không thể trích dẫn nó.")
+    m = await message.reply_text("Đang trích dẫn tin nhắn")
     if len(message.command) < 2:
         messages = [message.reply_to_message]
 
@@ -85,12 +85,12 @@ async def quotly_func(client, message: Message):
         arg = isArgInt(message)
         if arg[0]:
             if arg[1] < 2 or arg[1] > 10:
-                return await m.edit("Argument must be between 2-10.")
+                return await m.edit("Đối số phải nằm giữa 2-10.")
 
             count = arg[1]
 
-            # Fetching 5 extra messages so that we can ignore media
-            # messages and still end up with correct offset
+            # Đang tìm nạp thêm 5 tin nhắn để chúng tôi có thể bỏ qua phương tiện
+             # tin nhắn và vẫn kết thúc với phần bù chính xác
             messages = [
                 i
                 for i in await client.get_messages(
@@ -116,10 +116,10 @@ async def quotly_func(client, message: Message):
             )
             messages = [reply_message]
     else:
-        return await m.edit("Incorrect argument, check quotly module in help section.")
+        return await m.edit("Đối số không chính xác, hãy kiểm tra mô-đun quotly trong phần trợ giúp.")
     try:
         if not message:
-            return await m.edit("Something went wrong.")
+            return await m.edit("Đã xảy ra sự cố.")
 
         sticker = await quotify(messages)
         if not sticker[0]:
@@ -131,10 +131,10 @@ async def quotly_func(client, message: Message):
         sticker.close()
     except Exception as e:
         await m.edit(
-            "Something went wrong while quoting messages,"
-            + " This error usually happens when there's a "
-            + " message containing something other than text,"
-            + " or one of the messages in-between are deleted."
+            "Đã xảy ra lỗi khi trích dẫn tin nhắn,"
+             + " Lỗi này thường xảy ra khi có "
+             + " tin nhắn chứa nội dung khác ngoài văn bản,"
+             + " hoặc một trong các tin nhắn ở giữa đã bị xóa."
         )
         e = format_exc()
         print(e)
