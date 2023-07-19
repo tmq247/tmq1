@@ -33,28 +33,28 @@ __MODULE__ = "Pipes"
 __HELP__ = """
 **THIS MODULE IS ONLY FOR DEVS**
 
-Use this module to create a pipe that will forward messages of one chat/channel to another.
+Sử dụng mô-đun này để tạo một đường ống chuyển tiếp tin nhắn của một cuộc trò chuyện/kênh này sang một cuộc trò chuyện/kênh khác.
 
 
 /activate_pipe [FROM_CHAT_ID] [TO_CHAT_ID] [BOT|USERBOT]
 
-    Active a pipe.
+   Kích hoạt một đường ống.
 
-    choose 'BOT' or 'USERBOT' according to your needs,
-    this will decide which client will fetch the
-    message from 'FROM_CHAT'.
+     chọn 'BOT' hoặc 'USERBOT' tùy theo nhu cầu của bạn,
+     điều này sẽ quyết định khách hàng nào sẽ tìm nạp
+     tin nhắn từ 'FROM_CHAT'.
 
 
 /deactivate_pipe [FROM_CHAT_ID]
-    Deactivete a pipe.
+    Vô hiệu hóa một đường ống.
 
 
 /show_pipes
-    Show all the active pipes.
+    Hiển thị tất cả các đường ống đang hoạt động.
 
 **NOTE:**
-    These pipes are only temporary, and will be destroyed
-    on restart.
+   Những đường ống này chỉ là tạm thời và sẽ bị phá hủy
+     khi khởi động lại.
 """
 pipes_list_bot = {}
 pipes_list_userbot = {}
@@ -100,7 +100,7 @@ async def activate_pipe_func(_, message: Message):
 
     if len(message.command) != 4:
         return await message.reply(
-            "**Usage:**\n/activate_pipe [FROM_CHAT_ID] [TO_CHAT_ID] [BOT|USERBOT]"
+            "**Cách sử dụng:**\n/activate_pipe [FROM_CHAT_ID] [TO_CHAT_ID] [BOT|USERBOT]"
         )
 
     text = message.text.strip().split()
@@ -110,17 +110,17 @@ async def activate_pipe_func(_, message: Message):
     fetcher = text[3].lower()
 
     if fetcher not in ["bot", "userbot"]:
-        return await message.reply("Wrong fetcher, see help menu.")
+        return await message.reply("Trình tìm nạp sai, hãy xem menu trợ giúp.")
 
     if from_chat in pipes_list_bot or from_chat in pipes_list_userbot:
-        return await message.reply_text("This pipe is already active.")
+        return await message.reply_text("Đường ống này đã hoạt động.")
 
     dict_ = pipes_list_bot
     if fetcher == "userbot":
         dict_ = pipes_list_userbot
 
     dict_[from_chat] = to_chat
-    await message.reply_text("Activated pipe.")
+    await message.reply_text("ống kích hoạt.")
 
 
 @app.on_message(filters.command("deactivate_pipe") & SUDOERS)
@@ -129,20 +129,20 @@ async def deactivate_pipe_func(_, message: Message):
     global pipes_list_bot, pipes_list_userbot
 
     if len(message.command) != 2:
-        await message.reply_text("**Usage:**\n/deactivate_pipe [FROM_CHAT_ID]")
+        await message.reply_text("**Cách sử dụng:**\n/deactivate_pipe [FROM_CHAT_ID]")
         return
     text = message.text.strip().split()
     from_chat = int(text[1])
 
     if from_chat not in pipes_list_bot and from_chat not in pipes_list_userbot:
-        await message.reply_text("This pipe is already inactive.")
+        await message.reply_text("Đường ống này đã không hoạt động.")
 
     dict_ = pipes_list_bot
     if from_chat in pipes_list_userbot:
         dict_ = pipes_list_userbot
 
     del dict_[from_chat]
-    await message.reply_text("Deactivated pipe.")
+    await message.reply_text("Đường ống ngừng hoạt động.")
 
 
 @app.on_message(filters.command("pipes") & SUDOERS)
@@ -150,11 +150,11 @@ async def deactivate_pipe_func(_, message: Message):
 async def show_pipes_func(_, message: Message):
     pipes_list_bot.update(pipes_list_userbot)
     if not pipes_list_bot:
-        return await message.reply_text("No pipe is active.")
+        return await message.reply_text("Không có đường ống nào đang hoạt động.")
 
     text = ""
     for count, pipe in enumerate(pipes_list_bot.items(), 1):
         text += (
-            f"**Pipe:** `{count}`\n**From:** `{pipe[0]}`\n" + f"**To:** `{pipe[1]}`\n\n"
+            f"**Ống dẫn:** `{count}`\n**Từ:** `{pipe[0]}`\n" + f"**Tới:** `{pipe[1]}`\n\n"
         )
     await message.reply_text(text)
