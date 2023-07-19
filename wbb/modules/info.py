@@ -32,8 +32,8 @@ from wbb.utils.dbfunctions import is_gbanned_user, user_global_karma
 
 __MODULE__ = "Info"
 __HELP__ = """
-/info [USERNAME|ID] - Get info about a user.
-/chat_info [USERNAME|ID] - Get info about a chat.
+/info [USERNAME|ID] - Nhận thông tin về người dùng.
+/chat_info [USERNAME|ID] - Nhận thông tin về một cuộc trò chuyện.
 """
 
 
@@ -104,7 +104,7 @@ async def info_func(_, message: Message):
     elif not message.reply_to_message and len(message.command) != 1:
         user = message.text.split(None, 1)[1]
 
-    m = await message.reply_text("Processing")
+    m = await message.reply_text("Đang xử lý")
 
     try:
         info_caption, photo_id = await get_user_info(user)
@@ -124,14 +124,14 @@ async def info_func(_, message: Message):
 async def chat_info_func(_, message: Message):
     try:
         if len(message.command) > 2:
-            return await message.reply_text("**Usage:**/chat_info [USERNAME|ID]")
+            return await message.reply_text("**Cách sử dụng:**/chat_info [USERNAME|ID]")
 
         if len(message.command) == 1:
             chat = message.chat.id
         elif len(message.command) == 2:
             chat = message.text.split(None, 1)[1]
 
-        m = await message.reply_text("Processing")
+        m = await message.reply_text("Đang xử lý")
 
         info_caption, photo_id = await get_chat_info(chat)
         if not photo_id:
