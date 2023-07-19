@@ -36,7 +36,7 @@ from pyrogram.types import (
 from wbb import app
 from wbb.core.decorators.errors import capture_err
 
-# NOTE: THIS MODULE IS SPECIFICALLY FOR @PatheticRice GROUP, YOU CAN REMOVE IT IN YOUR FORK IF YOU WANT TO
+# LƯU Ý: MÔ-ĐUN NÀY DÀNH RIÊNG CHO NHÓM @PatheticRice, BẠN CÓ THỂ BỎ NÓ TRONG NHÓM CỦA MÌNH NẾU MUỐN
 
 RICE_GROUP = "PatheticRicers"
 RICE_CHANNEL = "RiceGallery"
@@ -50,12 +50,12 @@ RICE_CHANNEL = "RiceGallery"
 )
 @capture_err
 async def rice(_, message: Message):
-    """Forward media and media_group messages which has caption starts
-    with [RICE] with space and description in RICE_GROUP to RICE_CHANNEL
-    edited or forwarded messages won't be forwarded
+    """Chuyển tiếp tin nhắn media và media_group có chú thích bắt đầu
+     với [RICE] có khoảng trống và mô tả trong RICE_GROUP tới RICE_CHANNEL
+     tin nhắn đã chỉnh sửa hoặc chuyển tiếp sẽ không được chuyển tiếp
     """
     await message.reply_text(
-        "**Waiting for admin to approve...**",
+        "**Chờ admin duyệt...**",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -78,7 +78,7 @@ async def callback_query_forward_rice(_, callback_query):
     if not approver_status in (ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER):
         await callback_query.answer("Only admin can approve this!")
         return
-    await callback_query.answer("Successfully approved")
+    await callback_query.answer("Phê duyệt thành công")
     m_op = callback_query.message.reply_to_message
     u_op = m_op.from_user
     arg_caption = f"{m_op.caption}\nOP: [{u_op.first_name}]({m_op.link})"
@@ -103,8 +103,8 @@ async def callback_query_forward_rice(_, callback_query):
     await callback_query.message.delete()
     reply_text = (
         f"**OP**: {u_op.mention()}\n"
-        f"**Approver**: {u_approver.mention()}\n"
-        f"**Forwarded**: [Rice Gallery]({link})"
+        f"**Người phê duyệt**: {u_approver.mention()}\n"
+        f"** Đã chuyển tiếp**: [Rice Gallery]({link})"
     )
     await m_op.reply_text(reply_text, disable_web_page_preview=True)
 
@@ -117,9 +117,9 @@ async def callback_query_ignore_rice(_, callback_query):
     m_op = callback_query.message.reply_to_message
     u_op = m_op.from_user
     if u_disprover.id == u_op.id:
-        await callback_query.answer("Ok, this rice won't be forwarded")
+        await callback_query.answer("Ok, gạo này sẽ không được chuyển tiếp")
     elif disprover_status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
         await m_op.reply_text(f"{u_disprover.mention} ignored this rice")
     else:
-        return await callback_query.answer("Only admin or OP could ignore it")
+        return await callback_query.answer("Chỉ quản trị viên hoặc OP mới có thể bỏ qua nó")
     await callback_query.message.delete()
