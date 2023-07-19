@@ -40,9 +40,9 @@ from wbb.utils.filter_groups import blacklist_filters_group
 
 __MODULE__ = "Blacklist"
 __HELP__ = """
-/blacklisted - Get All The Blacklisted Words In The Chat.
-/blacklist [WORD|SENTENCE] - Blacklist A Word Or A Sentence.
-/whitelist [WORD|SENTENCE] - Whitelist A Word Or A Sentence.
+/blacklisted -Nhận tất cả các từ trong danh sách đen trong cuộc trò chuyện.
+/blacklist [WORD|SENTENCE] - Danh sách đen Một từ hoặc một câu.
+/whitelist [WORD|SENTENCE] - Đưa một từ hoặc một câu vào danh sách trắng.
 """
 
 
@@ -50,13 +50,13 @@ __HELP__ = """
 @adminsOnly("can_restrict_members")
 async def save_filters(_, message):
     if len(message.command) < 2:
-        return await message.reply_text("Usage:\n/blacklist [WORD|SENTENCE]")
+        return await message.reply_text("Cách sử dụng:\n/danh sách đen [WORD|SENTENCE]")
     word = message.text.split(None, 1)[1].strip()
     if not word:
-        return await message.reply_text("**Usage**\n__/blacklist [WORD|SENTENCE]__")
+        return await message.reply_text("**Cách sử dụng**\n__/danh sách đen [WORD|SENTENCE]__")
     chat_id = message.chat.id
     await save_blacklist_filter(chat_id, word)
-    await message.reply_text(f"__**Blacklisted {word}.**__")
+    await message.reply_text(f"__**Danh sách đen {word}.**__")
 
 
 @app.on_message(filters.command("blacklisted") & ~filters.private)
@@ -64,7 +64,7 @@ async def save_filters(_, message):
 async def get_filterss(_, message):
     data = await get_blacklisted_words(message.chat.id)
     if not data:
-        await message.reply_text("**No blacklisted words in this chat.**")
+        await message.reply_text("**Không có từ nào trong danh sách đen trong cuộc trò chuyện này.**")
     else:
         msg = f"List of blacklisted words in {message.chat.title} :\n"
         for word in data:
@@ -76,15 +76,15 @@ async def get_filterss(_, message):
 @adminsOnly("can_restrict_members")
 async def del_filter(_, message):
     if len(message.command) < 2:
-        return await message.reply_text("Usage:\n/whitelist [WORD|SENTENCE]")
+        return await message.reply_text("Cách sử dụng:\n/danh sách trắng [WORD|SENTENCE]")
     word = message.text.split(None, 1)[1].strip()
     if not word:
-        return await message.reply_text("Usage:\n/whitelist [WORD|SENTENCE]")
+        return await message.reply_text("Cách sử dụng:\n/danh sách trắng [WORD|SENTENCE]")
     chat_id = message.chat.id
     deleted = await delete_blacklist_filter(chat_id, word)
     if deleted:
-        return await message.reply_text(f"**Whitelisted {word}.**")
-    await message.reply_text("**No such blacklist filter.**")
+        return await message.reply_text(f"**Danh sách trắng {word}.**")
+    await message.reply_text("**Không có bộ lọc danh sách đen như vậy.**")
 
 
 @app.on_message(filters.text & ~filters.private, group=blacklist_filters_group)
