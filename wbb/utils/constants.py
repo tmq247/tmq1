@@ -46,7 +46,7 @@ async def mkdwnhelp(_, m: Message):
         [
             [
                 InlineKeyboardButton(
-                    text="Click Here!",
+                    text="Bấm vào đây!",
                     url=f"http://t.me/{BOT_USERNAME}?start=mkdwn_help",
                 )
             ]
@@ -54,7 +54,7 @@ async def mkdwnhelp(_, m: Message):
     )
     if m.chat.type != ChatType.PRIVATE:
         await m.reply(
-            "Click on the below button to get markdown usage syntax in pm!",
+            "Nhấp vào nút bên dưới để nhận cú pháp sử dụng markdown trong pm!",
             reply_markup=keyb,
         )
     else:
