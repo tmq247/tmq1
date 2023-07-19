@@ -34,7 +34,7 @@ from wbb.core.keyboard import ikb
 from wbb.utils.pastebin import paste
 
 __MODULE__ = "Paste"
-__HELP__ = "/paste - To Paste Replied Text Or Document To A Pastebin"
+__HELP__ = "/paste - Để dán văn bản hoặc tài liệu đã trả lời vào Pastebin"
 pattern = re.compile(r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$")
 
 
@@ -48,22 +48,22 @@ pattern = re.compile(r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$")
 @capture_err
 async def paste_func(_, message: Message):
     if not message.reply_to_message:
-        return await eor(message, text="Reply To A Message With /paste")
+        return await eor(message, text="Trả lời tin nhắn với /paste")
     r = message.reply_to_message
 
     if not r.text and not r.document:
-        return await eor(message, text="Only text and documents are supported.")
+        return await eor(message, text="Chỉ văn bản và tài liệu được hỗ trợ.")
 
-    m = await eor(message, text="Pasting...")
+    m = await eor(message, text="Đang dán...")
 
     if r.text:
         content = str(r.text)
     elif r.document:
         if r.document.file_size > 40000:
-            return await m.edit("You can only paste files smaller than 40KB.")
+            return await m.edit("Bạn chỉ có thể dán các tệp nhỏ hơn 40KB.")
 
         if not pattern.search(r.document.mime_type):
-            return await m.edit("Only text files can be pasted.")
+            return await m.edit("Chỉ có thể dán các tệp văn bản.")
 
         doc = await message.reply_to_message.download()
 
@@ -89,4 +89,4 @@ async def paste_func(_, message: Message):
             )
         await m.delete()
     except Exception:
-        await m.edit("Here's your paste", reply_markup=kb)
+        await m.edit("Đây là dán của bạn", reply_markup=kb)
