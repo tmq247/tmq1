@@ -36,17 +36,17 @@ from wbb.modules.userbot import eor
 )
 async def create(_, message):
     if len(message.command) < 3:
-        return await eor(message, text="__**.create (b|s|c) Name**__")
+        return await eor(message, text="__**.Tạo (b|s|c) Tên**__")
     group_type = message.command[1]
     split = message.command[2:]
     group_name = " ".join(split)
-    desc = "Welcome To My " + ("Supergroup" if group_type == "s" else "Channel")
+    desc = "Chào mừng đến với " + ("Supergroup" if group_type == "s" else "Channel")
     if group_type == "b":  # for basicgroup
         chat = await app2.create_group(group_name, BOT_USERNAME)
         link = await app2.get_chat(chat.id)
         await eor(
             message,
-            text=f"**Basicgroup Created: [{group_name}]({link.invite_link})**",
+            text=f"**Đã tạo nhóm cơ bản: [{group_name}]({link.invite_link})**",
             disable_web_page_preview=True,
         )
     elif group_type == "s":  # for supergroup
@@ -54,7 +54,7 @@ async def create(_, message):
         link = await app2.get_chat(chat.id)
         await eor(
             message,
-            text=f"**Supergroup Created: [{group_name}]({link.invite_link})**",
+            text=f"**Đã tạo siêu nhóm: [{group_name}]({link.invite_link})**",
             disable_web_page_preview=True,
         )
     elif group_type == "c":  # for channel
@@ -62,6 +62,6 @@ async def create(_, message):
         link = await app2.get_chat(chat.id)
         await eor(
             message,
-            text=f"**Channel Created: [{group_name}]({link.invite_link})**",
+            text=f"**Kênh đã tạo: [{group_name}]({link.invite_link})**",
             disable_web_page_preview=True,
         )
