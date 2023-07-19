@@ -12,9 +12,9 @@ __HELP__ = """
 Use this module to make the bot leave some chats
 in which you don't want it to be in.
 
-/blacklist_chat [CHAT_ID] - Blacklist a chat.
-/whitelist_chat [CHAT_ID] - Whitelist a chat.
-/blacklisted - Show blacklisted chats.
+/blacklist_chat [CHAT_ID] - Danh sách đen một cuộc trò chuyện.
+/whitelist_chat [CHAT_ID] - Đưa cuộc trò chuyện vào danh sách cho phép.
+/blacklisted - Hiển thị các cuộc trò chuyện trong danh sách đen.
 """
 
 
@@ -22,28 +22,28 @@ in which you don't want it to be in.
 @capture_err
 async def blacklist_chat_func(_, message: Message):
     if len(message.command) != 2:
-        return await message.reply_text("**Usage:**\n/blacklist_chat [CHAT_ID]")
+        return await message.reply_text("**Cách sử dụng:**\n/blacklist_chat [CHAT_ID]")
     chat_id = int(message.text.strip().split()[1])
     if chat_id in await blacklisted_chats():
-        return await message.reply_text("Chat is already blacklisted.")
+        return await message.reply_text("Trò chuyện đã được đưa vào danh sách đen.")
     blacklisted = await blacklist_chat(chat_id)
     if blacklisted:
-        return await message.reply_text("Chat has been successfully blacklisted")
-    await message.reply_text("Something wrong happened, check logs.")
+        return await message.reply_text("Trò chuyện đã được đưa vào danh sách đen thành công")
+    await message.reply_text("Đã xảy ra lỗi, hãy kiểm tra nhật ký.")
 
 
 @app.on_message(filters.command("whitelist_chat") & SUDOERS)
 @capture_err
 async def whitelist_chat_func(_, message: Message):
     if len(message.command) != 2:
-        return await message.reply_text("**Usage:**\n/whitelist_chat [CHAT_ID]")
+        return await message.reply_text("**Cách sử dụng:**\n/whitelist_chat [CHAT_ID]")
     chat_id = int(message.text.strip().split()[1])
     if chat_id not in await blacklisted_chats():
-        return await message.reply_text("Chat is already whitelisted.")
+        return await message.reply_text("Trò chuyện đã được đưa vào danh sách cho phép.")
     whitelisted = await whitelist_chat(chat_id)
     if whitelisted:
-        return await message.reply_text("Chat has been successfully whitelisted")
-    await message.reply_text("Something wrong happened, check logs.")
+        return await message.reply_text("Trò chuyện đã được đưa vào danh sách trắng thành công")
+    await message.reply_text("Trò chuyện đã được đưa vào danh sách trắng thành công.")
 
 
 @app.on_message(filters.command("blacklisted_chats") & SUDOERS)
@@ -57,5 +57,5 @@ async def blacklisted_chats_func(_, message: Message):
             title = "Private"
         text += f"**{count}. {title}** [`{chat_id}`]\n"
     if text == "":
-        return await message.reply_text("No blacklisted chats found.")
+        return await message.reply_text("Không tìm thấy cuộc trò chuyện nào trong danh sách đen.")
     await message.reply_text(text)
