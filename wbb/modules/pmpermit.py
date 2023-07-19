@@ -58,7 +58,7 @@ async def pmpermit_func(_, message):
     else:
         flood[str(user_id)] = 1
     if flood[str(user_id)] > 5:
-        await message.reply_text("SPAM DETECTED, BLOCKED USER AUTOMATICALLY!")
+        await message.reply_text("PHÁT HIỆN SPAM, TỰ ĐỘNG CHẶN NGƯỜI DÙNG!")
         return await app2.block_user(user_id)
     results = await app2.get_inline_bot_results(BOT_ID, f"pmpermit {user_id}")
     await app2.send_inline_bot_result(
@@ -77,12 +77,12 @@ async def pmpermit_func(_, message):
 @capture_err
 async def pm_approve(_, message):
     if not message.reply_to_message:
-        return await eor(message, text="Reply to a user's message to approve.")
+        return await eor(message, text="Trả lời tin nhắn của người dùng để phê duyệt.")
     user_id = message.reply_to_message.from_user.id
     if await is_pmpermit_approved(user_id):
-        return await eor(message, text="User is already approved to pm")
+        return await eor(message, text="Người dùng đã được phê duyệt để pm")
     await approve_pmpermit(user_id)
-    await eor(message, text="User is approved to pm")
+    await eor(message, text="Người dùng được phê duyệt để pm")
 
 
 @app2.on_message(
@@ -93,10 +93,10 @@ async def pm_approve(_, message):
 )
 async def pm_disapprove(_, message):
     if not message.reply_to_message:
-        return await eor(message, text="Reply to a user's message to disapprove.")
+        return await eor(message, text="Trả lời tin nhắn của người dùng để từ chối.")
     user_id = message.reply_to_message.from_user.id
     if not await is_pmpermit_approved(user_id):
-        await eor(message, text="User is already disapproved to pm")
+        await eor(message, text="Người dùng đã bị từ chối pm")
         async for m in app2.get_chat_history(user_id, limit=6):
             if m.reply_markup:
                 try:
@@ -105,7 +105,7 @@ async def pm_disapprove(_, message):
                     pass
         return
     await disapprove_pmpermit(user_id)
-    await eor(message, text="User is disapproved to pm")
+    await eor(message, text="Người dùng bị từ chối pm")
 
 
 @app2.on_message(
@@ -117,9 +117,9 @@ async def pm_disapprove(_, message):
 @capture_err
 async def block_user_func(_, message):
     if not message.reply_to_message:
-        return await eor(message, text="Reply to a user's message to block.")
+        return await eor(message, text="Trả lời tin nhắn của người dùng để chặn.")
     user_id = message.reply_to_message.from_user.id
-    # Blocking user after editing the message so that other person can get the update.
+    # Chặn người dùng sau khi chỉnh sửa tin nhắn để người khác có thể nhận được bản cập nhật.
     await eor(message, text="Successfully blocked the user")
     await app2.block_user(user_id)
 
@@ -132,10 +132,10 @@ async def block_user_func(_, message):
 )
 async def unblock_user_func(_, message):
     if not message.reply_to_message:
-        return await eor(message, text="Reply to a user's message to unblock.")
+        return await eor(message, text="Trả lời tin nhắn của người dùng để bỏ chặn.")
     user_id = message.reply_to_message.from_user.id
     await app2.unblock_user(user_id)
-    await eor(message, text="Successfully Unblocked the user")
+    await eor(message, text="Đã bỏ chặn người dùng thành công")
 
 
 # CALLBACK QUERY HANDLER
@@ -152,18 +152,18 @@ async def pmpermit_cq(_, cq):
     )
     if data == "approve":
         if user_id != USERBOT_ID:
-            return await cq.answer("This Button Is Not For You")
+            return await cq.answer("Nút này không dành cho bạn")
         await approve_pmpermit(int(victim))
         return await app.edit_inline_text(
-            cq.inline_message_id, "User Has Been Approved To PM."
+            cq.inline_message_id, "Người dùng đã được chấp thuận cho PM."
         )
 
     if data == "block":
         if user_id != USERBOT_ID:
-            return await cq.answer("This Button Is Not For You")
+            return await cq.answer("Nút này không dành cho bạn")
         await cq.answer()
         await app.edit_inline_text(
-            cq.inline_message_id, "Successfully blocked the user."
+            cq.inline_message_id, "Đã chặn người dùng thành công."
         )
         await app2.block_user(int(victim))
         return await app2.invoke(
@@ -175,13 +175,13 @@ async def pmpermit_cq(_, cq):
         )
 
     if user_id == USERBOT_ID:
-        return await cq.answer("It's For The Other Person.")
+        return await cq.answer("Nó Dành Cho Người Khác.")
 
     if data == "to_scam_you":
         async for m in app2.get_chat_history(user_id, limit=6):
             if m.reply_markup:
                 await m.delete()
-        await app2.send_message(user_id, "Blocked, Go scam someone else.")
+        await app2.send_message(user_id, "Bị chặn, Đi lừa đảo người khác.")
         await app2.block_user(user_id)
         await cq.answer()
 
@@ -192,9 +192,9 @@ async def pmpermit_cq(_, cq):
         else:
             flood2[str(user_id)] = 1
         if flood2[str(user_id)] > 5:
-            await app2.send_message(user_id, "SPAM DETECTED, USER BLOCKED.")
+            await app2.send_message(user_id, "SPAM ĐÃ PHÁT HIỆN, NGƯỜI DÙNG ĐÃ CHẶN.")
             return await app2.block_user(user_id)
         await app2.send_message(
             user_id,
-            "I'm busy right now, will approve you shortly, DO NOT SPAM.",
+            "Tôi đang bận, sẽ phê duyệt bạn ngay, KHÔNG SPAM.",
         )
