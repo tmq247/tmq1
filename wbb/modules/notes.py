@@ -33,15 +33,15 @@ from wbb.utils.dbfunctions import delete_note, get_note, get_note_names, save_no
 from wbb.utils.functions import extract_text_and_keyb
 
 __MODULE__ = "Notes"
-__HELP__ = """/notes To Get All The Notes In The Chat.
+__HELP__ = """/notes Để nhận tất cả các ghi chú trong cuộc trò chuyện.
 
-/save [NOTE_NAME] To Save A Note (Can be a sticker or text).
+/save [NOTE_NAME] Để Lưu Ghi chú (Có thể là nhãn dán hoặc văn bản).
 
 #NOTE_NAME To Get A Note.
 
-/delete [NOTE_NAME] To Delete A Note.
+/delete [NOTE_NAME] Để Xóa Ghi chú.
 
-Checkout /markdownhelp to know more about formattings and other syntax.
+Thanh toán /markdownhelp để biết thêm về định dạng và cú pháp khác.
 """
 
 
@@ -57,18 +57,18 @@ async def save_notee(_, message):
     if len(message.command) < 2 or not message.reply_to_message:
         await eor(
             message,
-            text="**Usage:**\nReply to a text or sticker with /save [NOTE_NAME] to save it.",
+            text="**Cách sử dụng:**\nTrả lời văn bản hoặc nhãn dán bằng /save [NOTE_NAME] để lưu nó.",
         )
 
     elif not message.reply_to_message.text and not message.reply_to_message.sticker:
         await eor(
             message,
-            text="__**You can only save text or stickers in notes.**__",
+            text="__**Bạn chỉ có thể lưu văn bản hoặc nhãn dán trong ghi chú.**__",
         )
     else:
         name = message.text.split(None, 1)[1].strip()
         if not name:
-            return await eor(message, text="**Usage**\n__/save [NOTE_NAME]__")
+            return await eor(message, text="**Cách sử dụng**\n__/save [NOTE_NAME]__")
         _type = "text" if message.reply_to_message.text else "sticker"
         note = {
             "type": _type,
@@ -79,7 +79,7 @@ async def save_notee(_, message):
         prefix = message.text.split()[0][0]
         chat_id = message.chat.id if prefix != USERBOT_PREFIX else USERBOT_ID
         await save_note(chat_id, name, note)
-        await eor(message, text=f"__**Saved note {name}.**__")
+        await eor(message, text=f"__**Ghi chú đã lưu {name}.**__")
 
 
 @app2.on_message(
@@ -98,7 +98,7 @@ async def get_notes(_, message):
     _notes = await get_note_names(chat_id)
 
     if not _notes:
-        return await eor(message, text="**No notes in this chat.**")
+        return await eor(message, text="**Không có ghi chú trong cuộc trò chuyện này.**")
     _notes.sort()
     msg = f"List of notes in {'USERBOT' if is_ubot else message.chat.title}\n"
     for note in _notes:
@@ -114,13 +114,13 @@ async def get_notes(_, message):
 )
 async def get_one_note_userbot(_, message):
     if len(message.text.split()) < 2:
-        return await eor(message, text="Invalid arguments")
+        return await eor(message, text="Đối số không hợp lệ")
 
     name = message.text.split(None, 1)[1]
 
     _note = await get_note(USERBOT_ID, name)
     if not _note:
-        return await eor(message, text="No such note.")
+        return await eor(message, text="Không có lưu ý như vậy.")
 
     if _note["type"] == "text":
         data = _note["data"]
@@ -168,10 +168,10 @@ async def get_one_note(_, message):
 @adminsOnly("can_change_info")
 async def del_note(_, message):
     if len(message.command) < 2:
-        return await eor(message, text="**Usage**\n__/delete [NOTE_NAME]__")
+        return await eor(message, text="**Cách sử dụng**\n__/delete [NOTE_NAME]__")
     name = message.text.split(None, 1)[1].strip()
     if not name:
-        return await eor(message, text="**Usage**\n__/delete [NOTE_NAME]__")
+        return await eor(message, text="**Cách sử dụng**\n__/delete [NOTE_NAME]__")
 
     prefix = message.text.split()[0][0]
     is_ubot = bool(prefix == USERBOT_PREFIX)
@@ -179,6 +179,6 @@ async def del_note(_, message):
 
     deleted = await delete_note(chat_id, name)
     if deleted:
-        await eor(message, text=f"**Deleted note {name} successfully.**")
+        await eor(message, text=f"**Đã xóa ghi chú {name} thành công.**")
     else:
-        await eor(message, text="**No such note.**")
+        await eor(message, text="**Không có lưu ý như vậy.**")
