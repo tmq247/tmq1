@@ -147,25 +147,25 @@ async def global_stats(_, message):
             privates_ub += 1
 
     msg = f"""
-**Global Stats of {BOT_NAME}**:
-    **{modules_count}** Modules Loaded.
-    **{len(keywords_list)}** Inline Modules Loaded.
-    **{rss_count}** Active RSS Feeds.
-    **{gbans}** Globally banned users.
-    **{filters_count}** Filters, Across **{filters_chats_count}** chats.
-    **{blacklist_filters_count}** Blacklist Filters, Across **{blacklist_filters_chats_count}** chats.
-    **{notes_count}** Notes, Across **{notes_chats_count}** chats.
-    **{warns_count}** Warns, Across **{warns_chats_count}** chats.
-    **{karmas_count}** Karma, Across **{karmas_chats_count}** chats.
-    **{served_users}** Users, Across **{served_chats}** chats.
-    **{total_users}** Total users in chats.
-    **{developers}** Developers And **{commits}** Commits On **[Github]({rurl})**.
+**Số liệu thống kê toàn cầu về {BOT_NAME}**:
+     **{modules_count}** Đã tải các mô-đun.
+     **{len(keywords_list)}** Đã tải mô-đun nội tuyến.
+     **{rss_count}** Nguồn cấp RSS đang hoạt động.
+     **{gbans}** Người dùng bị cấm trên toàn cầu.
+     **{filters_count}** Bộ lọc, Qua **{filters_chats_count}** cuộc trò chuyện.
+     **{blacklist_filters_count}** Bộ lọc danh sách đen, Qua các cuộc trò chuyện **{blacklist_filters_chats_count}**.
+     **{notes_count}** Ghi chú, Qua các cuộc trò chuyện **{notes_chats_count}**.
+     **{warns_count}** Cảnh báo, Xuyên suốt các cuộc trò chuyện **{warns_chats_count}**.
+     **{karmas_count}** Karma, Qua các cuộc trò chuyện **{karmas_chats_count}**.
+     **{serve_users}** Người dùng, trên các cuộc trò chuyện **{serve_chats}**.
+     **{total_users}** Tổng số người dùng trong cuộc trò chuyện.
+     **{developers}** Nhà phát triển và **{commits}** Cam kết trên **[Github]({rurl})**.
 
-**Global Stats of {USERBOT_NAME}**:
-    **{total_ub} Dialogs.**
-    **{groups_ub} Groups Joined.**
-    **{channels_ub} Channels Joined.**
-    **{bots_ub} Bots.**
-    **{privates_ub} Users.**
+**Số liệu thống kê toàn cầu về {USERBOT_NAME}**:
+     **{total_ub} hộp thoại.**
+     **{groups_ub} Nhóm đã tham gia.**
+     **{channels_ub} kênh đã tham gia.**
+     **{bots_ub} Bot.**
+     **{privates_ub} người dùng.**
 """
     await m.edit(msg, disable_web_page_preview=True)
