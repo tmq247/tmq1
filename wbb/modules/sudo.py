@@ -32,15 +32,15 @@ __MODULE__ = "Sudo"
 __HELP__ = """
 **THIS MODULE IS ONLY FOR DEVS**
 
-.useradd - To Add A User In Sudoers.
-.userdel - To Remove A User From Sudoers.
-.sudoers - To List Sudo Users.
+.useradd - Để thêm người dùng trong Sudoers.
+.userdel - Để xóa người dùng khỏi Sudoers.
+.sudoers - Để liệt kê người dùng Sudo.
 
 **NOTE:**
 
-Never add anyone to sudoers unless you trust them,
-sudo users can do anything with your account, they
-can even delete your account.
+Không bao giờ thêm bất kỳ ai vào sudoers trừ khi bạn tin tưởng họ,
+người dùng sudo có thể làm bất cứ điều gì với tài khoản của bạn, họ
+thậm chí có thể xóa tài khoản của bạn.
 """
 
 
@@ -55,16 +55,16 @@ async def useradd(_, message: Message):
     if not message.reply_to_message:
         return await eor(
             message,
-            text="Reply to someone's message to add him to sudoers.",
+            text="Trả lời tin nhắn của ai đó để thêm anh ta vào sudoers.",
         )
     user_id = message.reply_to_message.from_user.id
     umention = (await app2.get_users(user_id)).mention
     sudoers = await get_sudoers()
 
     if user_id in sudoers:
-        return await eor(message, text=f"{umention} is already in sudoers.")
+        return await eor(message, text=f"{umention} đã có trong sudoers.")
     if user_id == BOT_ID:
-        return await eor(message, text="You can't add assistant bot in sudoers.")
+        return await eor(message, text="Bạn không thể thêm trợ lý bot trong sudoers.")
 
     await add_sudo(user_id)
 
@@ -73,7 +73,7 @@ async def useradd(_, message: Message):
 
     await eor(
         message,
-        text=f"Successfully added {umention} in sudoers.",
+        text=f"Đã thêm thành công {umention} vào sudoers.",
     )
 
 
@@ -88,13 +88,13 @@ async def userdel(_, message: Message):
     if not message.reply_to_message:
         return await eor(
             message,
-            text="Reply to someone's message to remove him to sudoers.",
+            text="Trả lời tin nhắn của ai đó để xóa anh ta khỏi sudoers.",
         )
     user_id = message.reply_to_message.from_user.id
     umention = (await app2.get_users(user_id)).mention
 
     if user_id not in await get_sudoers():
-        return await eor(message, text=f"{umention} is not in sudoers.")
+        return await eor(message, text=f"{umention}không có trong sudoers.")
 
     await remove_sudo(user_id)
 
@@ -103,7 +103,7 @@ async def userdel(_, message: Message):
 
     await eor(
         message,
-        text=f"Successfully removed {umention} from sudoers.",
+        text=f"Đã xóa thành công {umention} khỏi sudoers.",
     )
 
 
@@ -127,5 +127,5 @@ async def sudoers_list(_, message: Message):
             continue
         text += f"{j}. {user}\n"
     if text == "":
-        return await eor(message, text="No sudoers found.")
+        return await eor(message, text="Không tìm thấy sudoer.")
     await eor(message, text=text)
