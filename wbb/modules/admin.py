@@ -73,9 +73,9 @@ __HELP__ = """/ban - Cấm người dùng
 /fullpromote - Quảng bá Thành viên Với Tất cả các Quyền
 /demote - Hạ cấp một thành viên
 /pin - Ghim tin nhắn
-/m - Tắt tiếng người dùng
-/tm - Tắt tiếng người dùng trong thời gian cụ thể
-/unm - Bật tiếng người dùng
+/m - cấm chat người dùng
+/tm - cấm chat người dùng trong thời gian cụ thể
+/unm - mở chat người dùng
 /ban_ghosts - Cấm tài khoản đã xóa
 /report | @admin | @admin - Báo cáo tin nhắn cho quản trị viên.
 /invite - Gửi liên kết mời nhóm/siêu nhóm."""
@@ -559,17 +559,17 @@ async def m(_, message: Message):
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id == BOT_ID:
-        return await message.reply_text("Tôi không thể tự tắt tiếng.")
+        return await message.reply_text("Tôi không thể tự cấm chat mình.")
     if user_id in SUDOERS:
         return await message.reply_text(
-            "Bạn muốn tắt âm thanh nâng cao?, XÁC NHẬN!"
+            "Bạn muốn cấm chat nâng cao?, XÁC NHẬN!"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
-            "Tôi không thể tắt tiếng quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
+            "Tôi không thể cấm chat quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
     mention = (await app.get_users(user_id)).mention
-    keyboard = ikb({"🚨  Bật tiếng  🚨": f"bật tiếng_{user_id}"})
+    keyboard = ikb({"🚨  Mở chat  🚨": f"Mở chat_{user_id}"})
     msg = (
         f"{mention}**đã bị cấm chat!**\n"
         f"**cấm chat bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
