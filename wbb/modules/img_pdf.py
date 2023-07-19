@@ -98,7 +98,7 @@ async def img_to_pdf(_, message: Message):
     reply = message.reply_to_message
     if not reply:
         return await message.reply(
-            "Reply to an image (as document) or group of images."
+            "Trả lời một hình ảnh (dưới dạng tài liệu) hoặc một nhóm hình ảnh."
         )
 
     m = await message.reply_text("Converting..")
