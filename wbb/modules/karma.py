@@ -43,11 +43,11 @@ from wbb.utils.filter_groups import karma_negative_group, karma_positive_group
 from wbb.utils.functions import get_user_id_and_usernames
 
 __MODULE__ = "Karma"
-__HELP__ = """[UPVOTE] - Use upvote keywords like "+", "+1", "thanks", etc to upvote a message.
-[DOWNVOTE] - Use downvote keywords like "-", "-1", etc to downvote a message.
-/karma_toggle [ENABLE|DISABLE] - Enable or Disable Karma System In Your Chat.
-Reply to a message with /karma to check a user's karma
-Send /karma without replying to any message to check karma list of top 10 users"""
+__HELP__ = """[UPVOTE] - Sử dụng các từ khóa ủng hộ như "+", "+1", "cảm ơn", v.v. để ủng hộ một tin nhắn.
+[DOWNVOTE] - Sử dụng các từ khóa phản đối như "-", "-1", v.v. để phản đối một tin nhắn.
+/karma_toggle [ENABLE|DISABLE] - Kích hoạt hoặc vô hiệu hóa hệ thống Nghiệp chướng trong cuộc trò chuyện của bạn.
+Trả lời tin nhắn bằng /karma để kiểm tra nghiệp lực của người dùng
+Gửi /karma mà không trả lời bất kỳ tin nhắn nào để kiểm tra danh sách 10 người dùng hàng đầu"""
 
 regex_upvote = r"^(\++|\+1|thx|tnx|tq|ty|thankyou|thank you|thanx|thanks|pro|cool|good|agree|👍|\++ .+)$"
 regex_downvote = r"^(-+|-1|not cool|disagree|worst|bad|👎|-+ .+)$"
@@ -87,7 +87,7 @@ async def upvote(_, message):
         new_karma = {"karma": karma}
         await update_karma(chat_id, await int_to_alpha(user_id), new_karma)
     await message.reply_text(
-        f"Incremented Karma of {user_mention} By 1 \nTotal Points: {karma}"
+        f"Tăng Karma của {user_mention} thêm 1 \nTổng số điểm: {karma}"
     )
 
 
@@ -138,7 +138,7 @@ async def downvote(_, message):
         new_karma = {"karma": karma}
         await update_karma(chat_id, await int_to_alpha(user_id), new_karma)
     await message.reply_text(
-        f"Decremented Karma of {user_mention} By 1 \nTotal Points: {karma}"
+        f"Giảm Karma của {user_mention} đi 1 \nTổng số điểm: {karma}"
     )
 
 
@@ -147,10 +147,10 @@ async def downvote(_, message):
 async def command_karma(_, message):
     chat_id = message.chat.id
     if not message.reply_to_message:
-        m = await message.reply_text("Analyzing Karma...")
+        m = await message.reply_text("Phân Tích Nghiệp chướng...")
         karma = await get_karmas(chat_id)
         if not karma:
-            return await m.edit("No karma in DB for this chat.")
+            return await m.edit("Không có Nghiệp chướng trong DB cho cuộc trò chuyện này.")
         msg = f"Karma list of {message.chat.title}"
         limit = 0
         karma_dicc = {}
@@ -166,7 +166,7 @@ async def command_karma(_, message):
                 )
             )
         if not karma_dicc:
-            return await m.edit("No karma in DB for this chat.")
+            return await m.edit("Không có nghiệp chướng trong DB cho cuộc trò chuyện này.")
         userdb = await get_user_id_and_usernames(app)
         karma = {}
         for user_idd, karma_count in karma_arranged.items():
@@ -180,22 +180,22 @@ async def command_karma(_, message):
         await m.edit(section(msg, karma))
     else:
         if not message.reply_to_message.from_user:
-            return await message.reply("Anon user has no karma.")
+            return await message.reply("Người dùng mới không có nghiệp chướng.")
 
         user_id = message.reply_to_message.from_user.id
         karma = await get_karma(chat_id, await int_to_alpha(user_id))
         if karma:
             karma = karma["karma"]
-            await message.reply_text(f"**Total Points**: __{karma}__")
+            await message.reply_text(f"**Tổng số điểm**: __{karma}__")
         else:
             karma = 0
-            await message.reply_text(f"**Total Points**: __{karma}__")
+            await message.reply_text(f"**Tổng số điểm**: __{karma}__")
 
 
 @app.on_message(filters.command("karma_toggle") & ~filters.private)
 @adminsOnly("can_change_info")
 async def captcha_state(_, message):
-    usage = "**Usage:**\n/karma_toggle [ENABLE|DISABLE]"
+    usage = "**Cách sử dụng:**\n/karma_toggle [ENABLE|DISABLE]"
     if len(message.command) != 2:
         return await message.reply_text(usage)
     chat_id = message.chat.id
@@ -203,9 +203,9 @@ async def captcha_state(_, message):
     state = state.lower()
     if state == "enable":
         await karma_on(chat_id)
-        await message.reply_text("Enabled Karma System for this chat.")
+        await message.reply_text("Đã bật Hệ thống Nghiệp chướng cho cuộc trò chuyện này.")
     elif state == "disable":
         await karma_off(chat_id)
-        await message.reply_text("Disabled Karma System for this chat.")
+        await message.reply_text("Đã tắt Hệ thống Nghiệp chướng cho cuộc trò chuyện này.")
     else:
         await message.reply_text(usage)
