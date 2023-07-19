@@ -39,14 +39,14 @@ from wbb.utils.filter_groups import chat_filters_group
 from wbb.utils.functions import extract_text_and_keyb
 
 __MODULE__ = "Filters"
-__HELP__ = """/filters To Get All The Filters In The Chat.
-/filter [FILTER_NAME] To Save A Filter (Can be a sticker or text).
-/stop [FILTER_NAME] To Stop A Filter.
+__HELP__ = """/bộ lọc để có được tất cả các bộ lọc trong cuộc trò chuyện.
+/filter [FILTER_NAME] Để lưu bộ lọc (Có thể là nhãn dán hoặc văn bản).
+/stop [FILTER_NAME] Dừng một bộ lọc.
 
 
-You can use markdown or html to save text too.
+Bạn cũng có thể sử dụng markdown hoặc html để lưu văn bản.
 
-Checkout /markdownhelp to know more about formattings and other syntax.
+Thanh toán /markdownhelp để biết thêm về định dạng và cú pháp khác.
 """
 
 
@@ -55,15 +55,15 @@ Checkout /markdownhelp to know more about formattings and other syntax.
 async def save_filters(_, message):
     if len(message.command) < 2 or not message.reply_to_message:
         return await message.reply_text(
-            "**Usage:**\nReply to a text or sticker with /filter [FILTER_NAME] to save it."
+            "**Cách sử dụng:**\nTrả lời văn bản hoặc hình dán bằng /filter [FILTER_NAME] để lưu nó."
         )
     if not message.reply_to_message.text and not message.reply_to_message.sticker:
         return await message.reply_text(
-            "__**You can only save text or stickers in filters.**__"
+            "__**Bạn chỉ có thể lưu văn bản hoặc nhãn dán trong bộ lọc.**__"
         )
     name = message.text.split(None, 1)[1].strip()
     if not name:
-        return await message.reply_text("**Usage:**\n__/filter [FILTER_NAME]__")
+        return await message.reply_text("**Cách sử dụng:**\n__/bộ lọc [FILTER_NAME]__")
     chat_id = message.chat.id
     _type = "text" if message.reply_to_message.text else "sticker"
     _filter = {
@@ -73,7 +73,7 @@ async def save_filters(_, message):
         else message.reply_to_message.sticker.file_id,
     }
     await save_filter(chat_id, name, _filter)
-    await message.reply_text(f"__**Saved filter {name}.**__")
+    await message.reply_text(f"__**Bộ lọc đã lưu {name}.**__")
 
 
 @app.on_message(filters.command("filters") & ~filters.private)
@@ -81,7 +81,7 @@ async def save_filters(_, message):
 async def get_filterss(_, message):
     _filters = await get_filters_names(message.chat.id)
     if not _filters:
-        return await message.reply_text("**No filters in this chat.**")
+        return await message.reply_text("**Không có bộ lọc nào trong cuộc trò chuyện này.**")
     _filters.sort()
     msg = f"List of filters in {message.chat.title} :\n"
     for _filter in _filters:
@@ -93,16 +93,16 @@ async def get_filterss(_, message):
 @adminsOnly("can_change_info")
 async def del_filter(_, message):
     if len(message.command) < 2:
-        return await message.reply_text("**Usage:**\n__/stop [FILTER_NAME]__")
+        return await message.reply_text("**Cách sử dụng:**\n__/stop [FILTER_NAME]__")
     name = message.text.split(None, 1)[1].strip()
     if not name:
-        return await message.reply_text("**Usage:**\n__/stop [FILTER_NAME]__")
+        return await message.reply_text("**Cách sử dụng:**\n__/stop [FILTER_NAME]__")
     chat_id = message.chat.id
     deleted = await delete_filter(chat_id, name)
     if deleted:
-        await message.reply_text(f"**Deleted filter {name}.**")
+        await message.reply_text(f"**Đã xóa bộ lọc {name}.**")
     else:
-        await message.reply_text("**No such filter.**")
+        await message.reply_text("**Không có bộ lọc như vậy.**")
 
 
 @app.on_message(
