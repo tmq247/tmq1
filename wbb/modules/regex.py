@@ -8,7 +8,7 @@ from wbb import app
 from wbb.utils.filter_groups import regex_group
 
 __MODULE__ = "Sed"
-__HELP__ = "**Usage:**\ns/foo/bar"
+__HELP__ = "**Cách sử dụng:**\ns/foo/bar"
 
 DELIMITERS = ("/", ":", "|", "_")
 
@@ -35,12 +35,12 @@ async def sed(_, message):
 
         if not repl:
             return await message.reply_text(
-                "You're trying to replace... " "nothing with something?"
+                "Bạn đang cố gắng thay thế..." "không có gì bằng thứ gì đó?"
             )
 
         try:
             if infinite_checker(repl):
-                return await message.reply_text("Nice try -_-")
+                return await message.reply_text("Cố lên -_-")
 
             if "i" in flags and "g" in flags:
                 text = re.sub(repl, repl_with, to_fix, flags=re.I).strip()
@@ -56,7 +56,7 @@ async def sed(_, message):
         # empty string errors -_-
         if len(text) >= 4096:
             await message.reply_text(
-                "The result of the sed command was too long for \
+                "Kết quả của lệnh sed quá dài đối với \
                                                  telegram!"
             )
         elif text:
