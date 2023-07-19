@@ -54,31 +54,31 @@ from wbb.utils.functions import (
 )
 
 __MODULE__ = "Admin"
-__HELP__ = """/ban - Ban A User
-/dban - Delete the replied message banning its sender
-/tban - Ban A User For Specific Time
-/unban - Unban A User
-/listban - Ban a user from groups listed in a message
-/listunban - Unban a user from groups listed in a message
-/warn - Warn A User
-/dwarn - Delete the replied message warning its sender
-/rmwarns - Remove All Warning of A User
-/warns - Show Warning Of A User
-/kick - Kick A User
-/dkick - Delete the replied message kicking its sender
-/purge - Purge Messages
-/purge [n] - Purge "n" number of messages from replied message
-/del - Delete Replied Message
-/promote - Promote A Member
-/fullpromote - Promote A Member With All Rights
-/demote - Demote A Member
-/pin - Pin A Message
-/mute - Mute A User
-/tmute - Mute A User For Specific Time
-/unmute - Unmute A User
-/ban_ghosts - Ban Deleted Accounts
-/report | @admins | @admin - Report A Message To Admins.
-/invite - Send Group/SuperGroup Invite Link."""
+__HELP__ = """/ban - Cấm người dùng
+/dban - Xóa tin nhắn đã trả lời cấm người gửi tin nhắn đó
+/tban - Cấm người dùng trong thời gian cụ thể
+/unban - Bỏ cấm người dùng
+/listban - Cấm người dùng khỏi các nhóm được liệt kê trong tin nhắn
+/listunban - Bỏ cấm người dùng khỏi các nhóm được liệt kê trong thư
+/warn - Cảnh báo người dùng
+/dwarn - Xóa tin nhắn đã trả lời cảnh báo người gửi
+/rmwarns - Xóa tất cả cảnh báo của người dùng
+/warns - Hiển thị cảnh báo của người dùng
+/ kick - Đá người dùng
+/dkick - Xóa tin nhắn đã trả lời kick người gửi
+/purge - Xóa tin nhắn
+/purge [n] - Xóa "n" số tin nhắn khỏi tin nhắn đã trả lời
+/del - Xóa tin nhắn đã trả lời
+/promote - Quảng bá thành viên
+/fullpromote - Quảng bá Thành viên Với Tất cả các Quyền
+/demote - Hạ cấp một thành viên
+/pin - Ghim tin nhắn
+/ tắt tiếng - Tắt tiếng người dùng
+/tmute - Tắt tiếng người dùng trong thời gian cụ thể
+/bật tiếng - Bật tiếng người dùng
+/ban_ghosts - Cấm tài khoản đã xóa
+/báo cáo | @admin | @admin - Báo cáo tin nhắn cho quản trị viên.
+/invite - Gửi liên kết mời nhóm/siêu nhóm."""
 
 
 async def member_permissions(chat_id: int, user_id: int):
@@ -159,7 +159,7 @@ async def purgeFunc(_, message: Message):
     await message.delete()
 
     if not repliedmsg:
-        return await message.reply_text("Reply to a message to purge from.")
+        return await message.reply_text("Trả lời tin nhắn để xóa khỏi.")
 
     cmd = message.command
     if len(cmd) > 1 and cmd[1].isdigit():
@@ -206,22 +206,22 @@ async def purgeFunc(_, message: Message):
 async def kickFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "I can't kick myself, i can leave if you want."
+            "Tôi không thể đá chính mình, tôi có thể rời đi nếu bạn muốn."
         )
     if user_id in SUDOERS:
-        return await message.reply_text("You Wanna Kick The Elevated One?")
+        return await message.reply_text("Bạn Muốn Kick 1 Đấng ?")
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
-            "I can't kick an admin, You know the rules, so do i."
+            "Tôi không thể đá một quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
     mention = (await app.get_users(user_id)).mention
     msg = f"""
-**Kicked User:** {mention}
-**Kicked By:** {message.from_user.mention if message.from_user else 'Anon'}
-**Reason:** {reason or 'No Reason Provided.'}"""
+**Người dùng bị đá:** {mention}
+**Đá bởi:** {message.from_user.mention if message.from_user else 'Anon'}
+    **Lý do:** {reason or 'No Reason Provided.'}"""
     if message.command[0][0] == "d":
         await message.reply_to_message.delete()
     await message.chat.ban_member(user_id)
@@ -239,18 +239,18 @@ async def banFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message, sender_chat=True)
 
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "I can't ban myself, i can leave if you want."
+            "Tôi không thể cấm bản thân mình, tôi có thể rời đi nếu bạn muốn."
         )
     if user_id in SUDOERS:
         return await message.reply_text(
-            "You Wanna Ban The Elevated One?, RECONSIDER!"
+            "Bạn Muốn Ban 1 Đấng?, XÁC NHẬN!"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
-            "I can't ban an admin, You know the rules, so do i."
+            "Tôi không thể cấm một quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
 
     try:
@@ -263,8 +263,8 @@ async def banFunc(_, message: Message):
         )
 
     msg = (
-        f"**Banned User:** {mention}\n"
-        f"**Banned By:** {message.from_user.mention if message.from_user else 'Anon'}\n"
+        f"**Một đứa đã ra đảo:** {mention}\n"
+        f"**Được tiễn đi bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
     if message.command[0][0] == "d":
         await message.reply_to_message.delete()
@@ -273,18 +273,18 @@ async def banFunc(_, message: Message):
         time_value = split[0]
         temp_reason = split[1] if len(split) > 1 else ""
         temp_ban = await time_converter(message, time_value)
-        msg += f"**Banned For:** {time_value}\n"
+        msg += f"**Cấm cho đến:** {time_value}\n"
         if temp_reason:
-            msg += f"**Reason:** {temp_reason}"
+            msg += f"**Lý do:** {temp_reason}"
         with suppress(AttributeError):
             if len(time_value[:-1]) < 3:
                 await message.chat.ban_member(user_id, until_date=temp_ban)
                 await message.reply_text(msg)
             else:
-                await message.reply_text("You can't use more than 99")
+                await message.reply_text("Bạn không thể sử dụng nhiều hơn 99")
         return
     if reason:
-        msg += f"**Reason:** {reason}"
+        msg += f"**Lý do:** {reason}"
     await message.chat.ban_member(user_id)
     await message.reply_text(msg)
 
@@ -302,7 +302,7 @@ async def unban_func(_, message: Message):
     reply = message.reply_to_message
 
     if reply and reply.sender_chat and reply.sender_chat != message.chat.id:
-        return await message.reply_text("You cannot unban a channel")
+        return await message.reply_text("Bạn không thể bỏ cấm kênh")
 
     if len(message.command) == 2:
         user = message.text.split(None, 1)[1]
@@ -310,11 +310,11 @@ async def unban_func(_, message: Message):
         user = message.reply_to_message.from_user.id
     else:
         return await message.reply_text(
-            "Provide a username or reply to a user's message to unban."
+            "Cung cấp tên người dùng hoặc trả lời tin nhắn của người dùng để bỏ cấm."
         )
     await message.chat.unban_member(user)
     umention = (await app.get_users(user)).mention
-    await message.reply_text(f"Unbanned! {umention}")
+    await message.reply_text(f"Bỏ cấm! {umention}")
 
 
 # Ban users listed in a message
@@ -325,13 +325,13 @@ async def list_ban_(c, message: Message):
     userid, msglink_reason = await extract_user_and_reason(message)
     if not userid or not msglink_reason:
         return await message.reply_text(
-            "Provide a userid/username along with message link and reason to list-ban"
+            "Cung cấp userid/username cùng với liên kết tin nhắn và lý do cấm danh sách"
         )
     if (
         len(msglink_reason.split(" ")) == 1
     ):  # message link included with the reason
         return await message.reply_text(
-            "You must provide a reason to list-ban"
+            "Bạn phải cung cấp một lý do để cấm danh sách"
         )
     # seperate messge link from reason
     lreason = msglink_reason.split()
@@ -340,25 +340,25 @@ async def list_ban_(c, message: Message):
     if not re.search(
         r"(https?://)?t(elegram)?\.me/\w+/\d+", messagelink
     ):  # validate link
-        return await message.reply_text("Invalid message link provided")
+        return await message.reply_text("Liên kết tin nhắn không hợp lệ được cung cấp")
 
     if userid == BOT_ID:
-        return await message.reply_text("I can't ban myself.")
+        return await message.reply_text("Tôi không thể cấm bản thân mình.")
     if userid in SUDOERS:
         return await message.reply_text(
-            "You Wanna Ban The Elevated One?, RECONSIDER!"
+            "Bạn muốn cấm 1 Đấng?, XÁC NHẬN!"
         )
     splitted = messagelink.split("/")
     uname, mid = splitted[-2], int(splitted[-1])
     m = await message.reply_text(
-        "`Banning User from multiple groups. \
-         This may take some time`"
+        "`Cấm người dùng từ nhiều nhóm. \
+         Điều này có thể mất một thời gian`"
     )
     try:
         msgtext = (await app.get_messages(uname, mid)).text
         gusernames = re.findall("@\w+", msgtext)
     except:
-        return await m.edit_text("Could not get group usernames")
+        return await m.edit_text("Không thể lấy username của nhóm")
     count = 0
     for username in gusernames:
         try:
@@ -372,11 +372,11 @@ async def list_ban_(c, message: Message):
     mention = (await app.get_users(userid)).mention
 
     msg = f"""
-**List-Banned User:** {mention}
-**Banned User ID:** `{userid}`
+**Người dùng bị cấm trong danh sách:** {mention}
+**ID người dùng bị cấm:** `{userid}`
 **Admin:** {message.from_user.mention}
-**Affected chats:** `{count}`
-**Reason:** {reason}
+**Cuộc trò chuyện bị ảnh hưởng:** `{count}`
+**Lý do:** {reason}
 """
     await m.edit_text(msg)
 
@@ -389,25 +389,25 @@ async def list_unban_(c, message: Message):
     userid, msglink = await extract_user_and_reason(message)
     if not userid or not msglink:
         return await message.reply_text(
-            "Provide a userid/username along with message link to list-unban"
+            "Cung cấp userid/username cùng với liên kết thông báo tới list-unban"
         )
 
     if not re.search(
         r"(https?://)?t(elegram)?\.me/\w+/\d+", msglink
     ):  # validate link
-        return await message.reply_text("Invalid message link provided")
+        return await message.reply_text("Liên kết tin nhắn không hợp lệ được cung cấp")
 
     splitted = msglink.split("/")
     uname, mid = splitted[-2], int(splitted[-1])
     m = await message.reply_text(
-        "`Unbanning User from multiple groups. \
-         This may take some time`"
+        "`Bỏ cấm người dùng khỏi nhiều nhóm. \
+         Điều này có thể mất một thời gian`"
     )
     try:
         msgtext = (await app.get_messages(uname, mid)).text
         gusernames = re.findall("@\w+", msgtext)
     except:
-        return await m.edit_text("Could not get the group usernames")
+        return await m.edit_text("Không thể lấy username của nhóm")
     count = 0
     for username in gusernames:
         try:
@@ -420,10 +420,10 @@ async def list_unban_(c, message: Message):
         count += 1
     mention = (await app.get_users(userid)).mention
     msg = f"""
-**List-Unbanned User:** {mention}
-**Unbanned User ID:** `{userid}`
+**Người dùng không bị cấm trong danh sách:** {mention}
+**ID người dùng không bị cấm:** `{userid}`
 **Admin:** {message.from_user.mention}
-**Affected chats:** `{count}`
+**cuộc trò chuyện bị ảnh hưởng:** `{count}`
 """
     await m.edit_text(msg)
 
@@ -435,7 +435,7 @@ async def list_unban_(c, message: Message):
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     if not message.reply_to_message:
-        return await message.reply_text("Reply To A Message To Delete It")
+        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
     await message.reply_to_message.delete()
     await message.delete()
 
@@ -448,15 +448,15 @@ async def deleteFunc(_, message: Message):
 async def promoteFunc(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     
     bot = (await app.get_chat_member(message.chat.id, BOT_ID)).privileges
     if user_id == BOT_ID:
-        return await message.reply_text("I can't promote myself.")
+        return await message.reply_text("Tôi không thể thăng chức bản thân mình.")
     if not bot:
-        return await message.reply_text("I'm not an admin in this chat.")
+        return await message.reply_text("Tôi không phải là quản trị viên trong cuộc trò chuyện này.")
     if not bot.can_promote_members:
-        return await message.reply_text("I don't have enough permissions")
+        return await message.reply_text("Tôi không có đủ quyền")
 
     umention = (await app.get_users(user_id)).mention
     
@@ -474,7 +474,7 @@ async def promoteFunc(_, message: Message):
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Fully Promoted! {umention}")
+        return await message.reply_text(f"Thăng chức đầy đủ! {umention}")
 
     await message.chat.promote_member(
         user_id=user_id,
@@ -489,7 +489,7 @@ async def promoteFunc(_, message: Message):
             can_manage_video_chats=bot.can_manage_video_chats,
         ),
     )
-    await message.reply_text(f"Promoted! {umention}")
+    await message.reply_text(f"Đã thăng chức! {umention}")
 
 
 # Demote Member
@@ -500,12 +500,12 @@ async def promoteFunc(_, message: Message):
 async def demote(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id == BOT_ID:
-        return await message.reply_text("I can't demote myself.")
+        return await message.reply_text("Tôi không thể hạ cấp bản thân mình.")
     if user_id in SUDOERS:
         return await message.reply_text(
-            "You wanna demote the elevated one?, RECONSIDER!"
+            "Bạn muốn giáng cấp nâng cao?, XÁC NHẬN!"
         )
     await message.chat.promote_member(
         user_id=user_id,
@@ -531,20 +531,20 @@ async def demote(_, message: Message):
 @adminsOnly("can_pin_messages")
 async def pin(_, message: Message):
     if not message.reply_to_message:
-        return await message.reply_text("Reply to a message to pin/unpin it.")
+        return await message.reply_text("Trả lời tin nhắn để ghim/bỏ ghim tin nhắn đó.")
     r = message.reply_to_message
     if message.command[0][0] == "u":
         await r.unpin()
         return await message.reply_text(
-            f"**Unpinned [this]({r.link}) message.**",
+            f"**Đã bỏ ghim [this]({r.link}) message.**",
             disable_web_page_preview=True,
         )
     await r.pin(disable_notification=True)
     await message.reply(
-        f"**Pinned [this]({r.link}) message.**",
+        f"**Đã ghim [this]({r.link}) message.**",
         disable_web_page_preview=True,
     )
-    msg = "Please check the pinned message: ~ " + f"[Check, {r.link}]"
+    msg = "Vui lòng kiểm tra tin nhắn đã ghim: ~ " + f"[Kiểm tra, {r.link}]"
     filter_ = dict(type="text", data=msg)
     await save_filter(message.chat.id, "~pinned", filter_)
 
@@ -557,22 +557,22 @@ async def pin(_, message: Message):
 async def mute(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id == BOT_ID:
-        return await message.reply_text("I can't mute myself.")
+        return await message.reply_text("Tôi không thể tự tắt tiếng.")
     if user_id in SUDOERS:
         return await message.reply_text(
-            "You wanna mute the elevated one?, RECONSIDER!"
+            "Bạn muốn tắt âm thanh nâng cao?, XÁC NHẬN!"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
-            "I can't mute an admin, You know the rules, so do i."
+            "Tôi không thể tắt tiếng quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
     mention = (await app.get_users(user_id)).mention
-    keyboard = ikb({"🚨  Unmute  🚨": f"unmute_{user_id}"})
+    keyboard = ikb({"🚨  Bật tiếng  🚨": f"bật tiếng_{user_id}"})
     msg = (
-        f"**Muted User:** {mention}\n"
-        f"**Muted By:** {message.from_user.mention if message.from_user else 'Anon'}\n"
+        f"**Người dùng bị tắt tiếng:** {mention}\n"
+        f"**Tắt tiếng bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
     if message.command[0] == "tmute":
         split = reason.split(None, 1)
@@ -591,12 +591,12 @@ async def mute(_, message: Message):
                 )
                 await message.reply_text(msg, reply_markup=keyboard)
             else:
-                await message.reply_text("You can't use more than 99")
+                await message.reply_text("Bạn không thể sử dụng nhiều hơn 99")
         except AttributeError:
             pass
         return
     if reason:
-        msg += f"**Reason:** {reason}"
+        msg += f"**Lý do:** {reason}"
     await message.chat.restrict_member(user_id, permissions=ChatPermissions())
     await message.reply_text(msg, reply_markup=keyboard)
 
@@ -609,10 +609,10 @@ async def mute(_, message: Message):
 async def unmute(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     await message.chat.unban_member(user_id)
     umention = (await app.get_users(user_id)).mention
-    await message.reply_text(f"Unmuted! {umention}")
+    await message.reply_text(f"Bật tiếng! {umention}")
 
 
 # Ban deleted accounts
@@ -624,7 +624,7 @@ async def ban_deleted_accounts(_, message: Message):
     chat_id = message.chat.id
     deleted_users = []
     banned_users = 0
-    m = await message.reply("Finding ghosts...")
+    m = await message.reply("Tìm ma...")
 
     async for i in app.get_chat_members(chat_id):
         if i.user.is_deleted:
@@ -636,9 +636,9 @@ async def ban_deleted_accounts(_, message: Message):
             except Exception:
                 pass
             banned_users += 1
-        await m.edit(f"Banned {banned_users} Deleted Accounts")
+        await m.edit(f"Đã cấm {banned_users} Tài khoản đã xóa")
     else:
-        await m.edit("There are no deleted accounts in this chat")
+        await m.edit("Không có tài khoản nào bị xóa trong cuộc trò chuyện này")
 
 
 @app.on_message(filters.command(["warn", "dwarn"]) & ~filters.private)
@@ -647,25 +647,25 @@ async def warn_user(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "I can't warn myself, i can leave if you want."
+            "Tôi không thể cảnh báo bản thân mình, tôi có thể rời đi nếu bạn muốn."
         )
     if user_id in SUDOERS:
         return await message.reply_text(
-            "You Wanna Warn The Elevated One?, RECONSIDER!"
+            "Bạn Muốn Cảnh Báo Đấng Tối Cao?, HÃY XEM XÉT!"
         )
     if user_id in (await list_admins(chat_id)):
         return await message.reply_text(
-            "I can't warn an admin, You know the rules, so do i."
+            "Tôi không thể cảnh báo quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
     user, warns = await asyncio.gather(
         app.get_users(user_id),
         get_warn(chat_id, await int_to_alpha(user_id)),
     )
     mention = user.mention
-    keyboard = ikb({"🚨  Remove Warn  🚨": f"unwarn_{user_id}"})
+    keyboard = ikb({"🚨  Xóa cảnh báo  🚨": f"Xóa cảnh báo_{user_id}"})
     if warns:
         warns = warns["warns"]
     else:
@@ -675,16 +675,16 @@ async def warn_user(_, message: Message):
     if warns >= 2:
         await message.chat.ban_member(user_id)
         await message.reply_text(
-            f"Number of warns of {mention} exceeded, BANNED!"
+            f"Đã vượt quá số cảnh báo của {mention}, BỊ CẤM!"
         )
         await remove_warns(chat_id, await int_to_alpha(user_id))
     else:
         warn = {"warns": warns + 1}
         msg = f"""
-**Warned User:** {mention}
-**Warned By:** {message.from_user.mention if message.from_user else 'Anon'}
-**Reason:** {reason or 'No Reason Provided.'}
-**Warns:** {warns + 1}/3"""
+**Người dùng được cảnh báo:** {mention}
+**Cảnh báo bởi:** {message.from_user.mention if message.from_user else 'Anon'}
+**Lý do:** {reason or 'No Reason Provided.'}
+**Cảnh báo:** {warns + 1}/3"""
         await message.reply_text(msg, reply_markup=keyboard)
         await add_warn(chat_id, await int_to_alpha(user_id), warn)
 
@@ -697,8 +697,8 @@ async def remove_warning(_, cq: CallbackQuery):
     permission = "can_restrict_members"
     if permission not in permissions:
         return await cq.answer(
-            "You don't have enough permissions to perform this action.\n"
-            + f"Permission needed: {permission}",
+            "Bạn không có đủ quyền để thực hiện hành động này.\n"
+            + f"Quyền cần thiết: {permission}",
             show_alert=True,
         )
     user_id = cq.data.split("_")[1]
@@ -706,12 +706,12 @@ async def remove_warning(_, cq: CallbackQuery):
     if warns:
         warns = warns["warns"]
     if not warns or warns == 0:
-        return await cq.answer("User has no warnings.")
+        return await cq.answer("Người dùng không có cảnh báo.")
     warn = {"warns": warns - 1}
     await add_warn(chat_id, await int_to_alpha(user_id), warn)
     text = cq.message.text.markdown
     text = f"~~{text}~~\n\n"
-    text += f"__Warn removed by {from_user.mention}__"
+    text += f"__Cảnh báo bị xóa bởi {from_user.mention}__"
     await cq.message.edit(text)
 
 
@@ -723,7 +723,7 @@ async def remove_warning(_, cq: CallbackQuery):
 async def remove_warnings(_, message: Message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a message to remove a user's warnings."
+            "Trả lời tin nhắn để xóa cảnh báo của người dùng."
         )
     user_id = message.reply_to_message.from_user.id
     mention = message.reply_to_message.from_user.mention
@@ -732,10 +732,10 @@ async def remove_warnings(_, message: Message):
     if warns:
         warns = warns["warns"]
     if warns == 0 or not warns:
-        await message.reply_text(f"{mention} have no warnings.")
+        await message.reply_text(f"{mention}không có cảnh báo.")
     else:
         await remove_warns(chat_id, await int_to_alpha(user_id))
-        await message.reply_text(f"Removed warnings of {mention}.")
+        await message.reply_text(f"Đã xóa cảnh báo của {mention}.")
 
 
 # Warns
@@ -752,8 +752,8 @@ async def check_warns(_, message: Message):
     if warns:
         warns = warns["warns"]
     else:
-        return await message.reply_text(f"{mention} has no warnings.")
-    return await message.reply_text(f"{mention} has {warns}/3 warnings.")
+        return await message.reply_text(f"{mention} không có cảnh báo.")
+    return await message.reply_text(f"{mention} có {warns}/3 cảnh báo.")
 
 
 # Report
@@ -770,7 +770,7 @@ async def check_warns(_, message: Message):
 async def report_user(_, message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a message to report that user."
+            "Trả lời tin nhắn để báo cáo người dùng đó."
         )
 
     reply = message.reply_to_message
@@ -779,7 +779,7 @@ async def report_user(_, message):
         message.from_user.id if message.from_user else message.sender_chat.id
     )
     if reply_id == user_id:
-        return await message.reply_text("Why are you reporting yourself ?")
+        return await message.reply_text("Tại sao bạn báo cáo chính mình ?")
 
     list_of_admins = await list_admins(message.chat.id)
     linked_chat = (await app.get_chat(message.chat.id)).linked_chat
@@ -790,18 +790,18 @@ async def report_user(_, message):
             or reply_id == linked_chat.id
         ):
             return await message.reply_text(
-                "Do you know that the user you are replying is an admin ?"
+                "Bạn có biết rằng người dùng mà bạn đang trả lời là quản trị viên không ?"
             )
     else:
         if reply_id in list_of_admins or reply_id == message.chat.id:
             return await message.reply_text(
-                "Do you know that the user you are replying is an admin ?"
+                "Bạn có biết rằng người dùng mà bạn đang trả lời là quản trị viên không ?"
             )
 
     user_mention = (
         reply.from_user.mention if reply.from_user else reply.sender_chat.title
     )
-    text = f"Reported {user_mention} to admins!"
+    text = f"Đã báo cáo {user_mention} cho quản trị viên!"
     admin_data = [
         i
         async for i in app.get_chat_members(
