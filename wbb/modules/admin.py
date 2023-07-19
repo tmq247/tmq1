@@ -64,7 +64,7 @@ __HELP__ = """/ban - Cấm người dùng
 /dwarn - Xóa tin nhắn đã trả lời cảnh báo người gửi
 /rmwarns - Xóa tất cả cảnh báo của người dùng
 /warns - Hiển thị cảnh báo của người dùng
-/ kick - Đá người dùng
+/kick - Đá người dùng
 /dkick - Xóa tin nhắn đã trả lời kick người gửi
 /purge - Xóa tin nhắn
 /purge [n] - Xóa "n" số tin nhắn khỏi tin nhắn đã trả lời
@@ -73,11 +73,11 @@ __HELP__ = """/ban - Cấm người dùng
 /fullpromote - Quảng bá Thành viên Với Tất cả các Quyền
 /demote - Hạ cấp một thành viên
 /pin - Ghim tin nhắn
-/ tắt tiếng - Tắt tiếng người dùng
-/tmute - Tắt tiếng người dùng trong thời gian cụ thể
-/bật tiếng - Bật tiếng người dùng
+/m - Tắt tiếng người dùng
+/tm - Tắt tiếng người dùng trong thời gian cụ thể
+/unm - Bật tiếng người dùng
 /ban_ghosts - Cấm tài khoản đã xóa
-/báo cáo | @admin | @admin - Báo cáo tin nhắn cho quản trị viên.
+/report | @admin | @admin - Báo cáo tin nhắn cho quản trị viên.
 /invite - Gửi liên kết mời nhóm/siêu nhóm."""
 
 
@@ -552,9 +552,9 @@ async def pin(_, message: Message):
 # Mute members
 
 
-@app.on_message(filters.command(["mute", "tmute"]) & ~filters.private)
+@app.on_message(filters.command(["m", "tm"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
-async def mute(_, message: Message):
+async def m(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
@@ -571,23 +571,23 @@ async def mute(_, message: Message):
     mention = (await app.get_users(user_id)).mention
     keyboard = ikb({"🚨  Bật tiếng  🚨": f"bật tiếng_{user_id}"})
     msg = (
-        f"**Người dùng bị tắt tiếng:** {mention}\n"
-        f"**Tắt tiếng bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
+        f"{mention}**đã bị cấm chat!**\n"
+        f"**cấm chat bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
-    if message.command[0] == "tmute":
+    if message.command[0] == "tm":
         split = reason.split(None, 1)
         time_value = split[0]
         temp_reason = split[1] if len(split) > 1 else ""
-        temp_mute = await time_converter(message, time_value)
-        msg += f"**Muted For:** {time_value}\n"
+        temp_m = await time_converter(message, time_value)
+        msg += f"**cấm chat trong:** {time_value}\n"
         if temp_reason:
-            msg += f"**Reason:** {temp_reason}"
+            msg += f"**Lý do:** {temp_reason}"
         try:
             if len(time_value[:-1]) < 3:
                 await message.chat.restrict_member(
                     user_id,
                     permissions=ChatPermissions(),
-                    until_date=temp_mute,
+                    until_date=temp_m,
                 )
                 await message.reply_text(msg, reply_markup=keyboard)
             else:
@@ -596,7 +596,7 @@ async def mute(_, message: Message):
             pass
         return
     if reason:
-        msg += f"**Lý do:** {reason}"
+        msg += f"**Hãy ib cho** {reason} **để mở chat!!!"
     await message.chat.restrict_member(user_id, permissions=ChatPermissions())
     await message.reply_text(msg, reply_markup=keyboard)
 
@@ -604,15 +604,15 @@ async def mute(_, message: Message):
 # Unmute members
 
 
-@app.on_message(filters.command("unmute") & ~filters.private)
+@app.on_message(filters.command("unm") & ~filters.private)
 @adminsOnly("can_restrict_members")
-async def unmute(_, message: Message):
+async def unm(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     await message.chat.unban_member(user_id)
     umention = (await app.get_users(user_id)).mention
-    await message.reply_text(f"Bật tiếng! {umention}")
+    await message.reply_text(f"Mở chat cho! {umention}")
 
 
 # Ban deleted accounts
