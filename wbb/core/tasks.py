@@ -53,9 +53,9 @@ async def rm_task(task_id=None):
 
 
 async def _get_tasks_text():
-    await rm_task()  # Clean completed tasks
+    await rm_task()  #Làm sạch các nhiệm vụ đã hoàn thành
     if not tasks:
-        return f"{arrow('')} No pending task"
+        return f"{arrow('')} Không có nhiệm vụ đang chờ xử lý"
 
     text = bold("Tasks") + "\n"
 
