@@ -42,9 +42,9 @@ from wbb.utils.filter_groups import flood_group
 
 __MODULE__ = "Flood"
 __HELP__ = """
-Anti-Flood system, the one who sends more than 10 messages in a row, gets muted for an hour (Except for admins).
+Hệ thống Anti-Flood, người gửi hơn 10 tin nhắn liên tiếp, sẽ bị tắt tiếng trong một giờ (Ngoại trừ quản trị viên).
 
-/flood [ENABLE|DISABLE] - Turn flood detection on or off
+/flood [ENABLE|DISABLE] - Bật hoặc tắt tính năng phát hiện lũ lụt
 """
 
 DB = {}  # TODO Use mongodb instead of a fucking dict.
@@ -104,14 +104,14 @@ async def flood_control_func(_, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        text="🚨  Unmute  🚨",
-                        callback_data=f"unmute_{user_id}",
+                        text="🚨  Bật tiếng  🚨",
+                        callback_data=f"Bật tiếng_{user_id}",
                     )
                 ]
             ]
         )
         m = await message.reply_text(
-            f"Imagine flooding the chat in front of me, Muted {mention} for an hour!",
+            f"Hãy tưởng tượng tràn ngập cuộc trò chuyện trước mặt tôi, Tắt tiếng {mention} trong một giờ!",
             reply_markup=keyboard,
         )
 
@@ -134,8 +134,8 @@ async def flood_callback_func(_, cq: CallbackQuery):
     permission = "can_restrict_members"
     if permission not in permissions:
         return await cq.answer(
-            "You don't have enough permissions to perform this action.\n"
-            + f"Permission needed: {permission}",
+            "Bạn không có đủ quyền để thực hiện hành động này.\n"
+            + f"Quyền cần thiết: {permission}",
             show_alert=True,
         )
     user_id = cq.data.split("_")[1]
@@ -150,15 +150,15 @@ async def flood_callback_func(_, cq: CallbackQuery):
 @adminsOnly("can_change_info")
 async def flood_toggle(_, message: Message):
     if len(message.command) != 2:
-        return await message.reply_text("Usage: /flood [ENABLE|DISABLE]")
+        return await message.reply_text("Cách sử dụng: /flood [ENABLE|DISABLE]")
     status = message.text.split(None, 1)[1].strip()
     status = status.lower()
     chat_id = message.chat.id
     if status == "enable":
         await flood_on(chat_id)
-        await message.reply_text("Enabled Flood Checker.")
+        await message.reply_text("Đã bật Trình kiểm tra lũ lụt.")
     elif status == "disable":
         await flood_off(chat_id)
-        await message.reply_text("Disabled Flood Checker.")
+        await message.reply_text("Trình kiểm tra lũ bị vô hiệu hóa.")
     else:
-        await message.reply_text("Unknown Suffix, Use /flood [ENABLE|DISABLE]")
+        await message.reply_text("Hậu tố không xác định, sử dụng /flood [ENABLE|DISABLE]")
