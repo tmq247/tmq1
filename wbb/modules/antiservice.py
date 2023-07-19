@@ -9,7 +9,7 @@ from wbb.utils.dbfunctions import antiservice_off, antiservice_on, is_antiservic
 
 __MODULE__ = "AntiService"
 __HELP__ = """
-Plugin to delete service messages in a chat!
+Plugin để xóa tin nhắn dịch vụ trong một cuộc trò chuyện!
 
 /antiservice [enable|disable]
 """
@@ -26,15 +26,15 @@ async def anti_service(_, message):
     if status == "enable":
         await antiservice_on(chat_id)
         await message.reply_text(
-            "Enabled AntiService System. I will Delete Service Messages from Now on."
+            "Kích hoạt hệ thống AntiService. Tôi sẽ xóa tin nhắn dịch vụ từ bây giờ."
         )
     elif status == "disable":
         await antiservice_off(chat_id)
         await message.reply_text(
-            "Disabled AntiService System. I won't Be Deleting Service Message from Now on."
+            "Hệ thống AntiService bị vô hiệu hóa. Tôi sẽ không xóa tin nhắn dịch vụ từ bây giờ."
         )
     else:
-        await message.reply_text("Unknown Suffix, Use /antiservice [enable|disable]")
+        await message.reply_text("Hậu tố không xác định, sử dụng /antiservice [enable|disable]")
 
 
 @app.on_message(filters.service, group=11)
