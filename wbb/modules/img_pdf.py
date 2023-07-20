@@ -47,13 +47,13 @@ async def convert(
 
     for message in reply_messages:
         if not message.document:
-            return await m.edit("Not document, ABORTED!")
+            return await m.edit("Không phải tài liệu, ĐÃ HỦY!")
 
         if message.document.mime_type.split("/")[0] != "image":
-            return await m.edit("Invalid mime type!")
+            return await m.edit("loại mime không hợp lệ!")
 
         if message.document.file_size > 5000000:
-            return await m.edit("Size too large, ABORTED!")
+            return await m.edit("Kích thước quá lớn, ĐÃ HỦY!")
         documents.append(await message.download())
 
     for img_path in documents:
@@ -101,7 +101,7 @@ async def img_to_pdf(_, message: Message):
             "Trả lời một hình ảnh (dưới dạng tài liệu) hoặc một nhóm hình ảnh."
         )
 
-    m = await message.reply_text("Converting..")
+    m = await message.reply_text("Chuyển đổi...")
     start_time = time()
 
     if reply.media_group_id:
