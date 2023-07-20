@@ -671,33 +671,33 @@ async def warn_user(_, message: Message):
         return await message.reply_text(
             "Tôi không thể cảnh báo quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
-    user, warns = await asyncio.gather(
+    user, ws = await asyncio.gather(
         app.get_users(user_id),
         get_warn(chat_id, await int_to_alpha(user_id)),
     )
     mention = user.mention
     keyboard = ikb({"🚨  Xóa cảnh báo  🚨": f"Xóa cảnh báo_{user_id}"})
-    if warns:
-        warns = ws["ws"]
+    if ws:
+        ws = ws["ws"]
     else:
-        warns = 0
+        ws = 0
     if message.command[0][0] == "d":
         await message.reply_to_message.delete()
-    if warns >= 2:
+    if ws >= 2:
         await message.chat.ban_member(user_id)
         await message.reply_text(
             f"Đã vượt quá số cảnh báo của {mention}, BỊ CẤM!"
         )
         await remove_warns(chat_id, await int_to_alpha(user_id))
     else:
-        warn = {"ws": ws + 1}
+        w = {"ws": ws + 1}
         msg = f"""
 **Người dùng được cảnh báo:** {mention}
 **Cảnh báo bởi:** {message.from_user.mention if message.from_user else 'Anon'}
 **Lý do:** {reason or 'none.'}
 **Cảnh báo:** {ws + 1}/3"""
         await message.reply_text(msg, reply_markup=keyboard)
-        await add_warn(chat_id, await int_to_alpha(user_id), warn)
+        await add_warn(chat_id, await int_to_alpha(user_id), w)
 
 
 @app.on_callback_query(filters.regex("unw_"))
@@ -713,13 +713,13 @@ async def remove_warning(_, cq: CallbackQuery):
             show_alert=True,
         )
     user_id = cq.data.split("_")[1]
-    warns = await get_warn(chat_id, await int_to_alpha(user_id))
-    if warns:
-        warns = ws["ws"]
-    if not warns or warns == 0:
+    ws = await get_warn(chat_id, await int_to_alpha(user_id))
+    if ws:
+        ws = ws["ws"]
+    if not ws or ws == 0:
         return await cq.answer("Người dùng không có cảnh báo.")
-    warn = {"ws": ws - 1}
-    await add_warn(chat_id, await int_to_alpha(user_id), warn)
+    w = {"ws": ws - 1}
+    await add_warn(chat_id, await int_to_alpha(user_id), w)
     text = cq.message.text.markdown
     text = f"~~{text}~~\n\n"
     text += f"__Cảnh báo bị xóa bởi {from_user.mention}__"
@@ -739,10 +739,10 @@ async def remove_warnings(_, message: Message):
     user_id = message.reply_to_message.from_user.id
     mention = message.reply_to_message.from_user.mention
     chat_id = message.chat.id
-    warns = await get_warn(chat_id, await int_to_alpha(user_id))
-    if warns:
-        warns = ws["ws"]
-    if warns == 0 or not warns:
+    ws = await get_warn(chat_id, await int_to_alpha(user_id))
+    if ws:
+        ws = ws["ws"]
+    if ws == 0 or not ws:
         await message.reply_text(f"{mention}không có cảnh báo.")
     else:
         await remove_warns(chat_id, await int_to_alpha(user_id))
@@ -758,10 +758,10 @@ async def check_warns(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
-    warns = await get_warn(message.chat.id, await int_to_alpha(user_id))
+    ws = await get_warn(message.chat.id, await int_to_alpha(user_id))
     mention = (await app.get_users(user_id)).mention
-    if warns:
-        warns = ws["ws"]
+    if ws:
+        ws = ws["ws"]
     else:
         return await message.reply_text(f"{mention} không có cảnh báo.")
     return await message.reply_text(f"{mention} có {ws}/3 cảnh báo.")
