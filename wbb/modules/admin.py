@@ -522,7 +522,7 @@ async def demote(_, message: Message):
         ),
     )
     umention = (await app.get_users(user_id)).mention
-    await message.reply_text(f"Demoted! {umention}")
+    await message.reply_text(f"Giáng chức! {umention}")
 
 
 # Pin Messages
@@ -537,12 +537,12 @@ async def pin(_, message: Message):
     if message.command[0][0] == "u":
         await r.unpin()
         return await message.reply_text(
-            f"**Đã bỏ ghim [this]({r.link}) message.**",
+            f"**Đã bỏ ghim [this]({r.link}) tin nhắn.**",
             disable_web_page_preview=True,
         )
     await r.pin(disable_notification=True)
     await message.reply(
-        f"**Đã ghim [this]({r.link}) message.**",
+        f"**Đã ghim [this]({r.link}) tin nhắn.**",
         disable_web_page_preview=True,
     )
     msg = "Vui lòng kiểm tra tin nhắn đã ghim: ~ " + f"[Kiểm tra, {r.link}]"
@@ -573,7 +573,7 @@ async def m(_, message: Message):
     keyboard = ikb({"🚨  Mở chat  🚨": f"Mở chat_{user_id}"})
     msg = (
         f"{mention}**đã bị cấm chat!**\n"
-        f"**cấm chat bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
+        f"**Bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
     if message.command[0][0] == "b":
         await message.reply_to_message.delete()
@@ -582,7 +582,7 @@ async def m(_, message: Message):
         time_value = split[0]
         temp_reason = split[1] if len(split) > 1 else ""
         temp_m = await time_converter(message, time_value)
-        msg += f"**cấm chat trong:** {time_value}\n"
+        msg += f"**Cấm chat trong:** {time_value}\n"
         if temp_reason:
             msg += f"**Lý do:** {temp_reason}"
         try:
@@ -599,7 +599,7 @@ async def m(_, message: Message):
             pass
         return
     if reason:
-        msg += f"**Hãy ib cho** {reason} **để mở chat!!!"
+        msg += f"**Ib cho** {reason} **để mở chat!!!"
     await message.chat.restrict_member(user_id, permissions=ChatPermissions())
     await message.reply_text(msg, reply_markup=keyboard)
 
@@ -835,7 +835,7 @@ async def invite(_, message):
         link = (await app.get_chat(message.chat.id)).invite_link
         if not link:
             link = await app.export_chat_invite_link(message.chat.id)
-        text = f"Here's This Group Invite Link.\n\n{link}"
+        text = f"Đây là liên kết mời nhóm này.\n\n{link}"
         if message.reply_to_message:
             await message.reply_to_message.reply_text(
                 text, disable_web_page_preview=True
