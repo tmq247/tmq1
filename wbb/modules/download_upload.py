@@ -79,7 +79,7 @@ async def download_func(_, message: Message):
 
     text = message.text
     if len(text.split()) < 2:
-        return await eor(m, text="Invalid Arguments")
+        return await eor(m, text="Đối số không hợp lệ")
 
     url = text.split(None, 1)[1]
 
@@ -99,7 +99,7 @@ async def download_func(_, message: Message):
     except Exception as e:
         e = format_exc()
         e = e.splitlines()[-1]
-        return await eor(m, text=f"**Error:** `{str(e)}`")
+        return await eor(m, text=f"**Lỗi:** `{str(e)}`")
 
     elapsed = int(time() - start)
     body["File"] = file.split("/")[-1]
@@ -116,7 +116,7 @@ async def download_func(_, message: Message):
 )
 async def upload_func(_, message: Message):
     if len(message.text.split()) != 2:
-        return await eor(message, text="Invalid Arguments")
+        return await eor(message, text="Đối số không hợp lệ")
 
     url_or_path = message.text.split(None, 1)[1]
 
@@ -169,4 +169,4 @@ async def upload_func(_, message: Message):
     except Exception as e:
         e = format_exc()
         e = e.splitlines()[-1]
-        return await eor(m, text=f"**Error:** `{str(e)}`")
+        return await eor(m, text=f"**Lỗi:** `{str(e)}`")
