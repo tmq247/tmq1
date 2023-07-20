@@ -33,21 +33,21 @@ from wbb import MONGO_URL, SUDOERS, app
 @app.on_message(filters.command("backup") & SUDOERS)
 async def backup(_, message: Message):
     if message.chat.type != enums.ChatType.PRIVATE:
-        return await message.reply("This command can only be used in private")
+        return await message.reply("Lệnh này chỉ có thể được sử dụng riêng tư")
 
-    m = await message.reply("Backing up data...")
+    m = await message.reply("Sao lưu dữ liệu...")
 
     code = execute(f'mongodump --uri "{MONGO_URL}"')
     if int(code) != 0:
         return await m.edit(
-            "Looks like you don't have mongo-database-tools installed "
-            + "grab it from mongodb.com/try/download/database-tools"
+            "Có vẻ như bạn chưa cài đặt mongo-database-tools "
+            + "Lấy nó từ mongodb.com/try/download/database-tools"
         )
 
     code = execute("zip backup.zip -r9 dump/*")
     if int(code) != 0:
         return await m.edit(
-            "Looks like you don't have `zip` package installed, BACKUP FAILED!"
+            "Có vẻ như bạn chưa cài đặt gói `zip`, SAO LƯU KHÔNG THÀNH CÔNG!"
         )
 
     await message.reply_document("backup.zip")
