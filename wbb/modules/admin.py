@@ -74,6 +74,7 @@ __HELP__ = """/ban - Cấm người dùng
 /demote - Hạ cấp một thành viên
 /pin - Ghim tin nhắn
 /m - cấm chat người dùng
+/bm - Xóa tin nhắn đã trả lời cấm  chat người gửi tin nhắn đó
 /tm - cấm chat người dùng trong thời gian cụ thể
 /unm - mở chat người dùng
 /ban_ghosts - Cấm tài khoản đã xóa
@@ -146,7 +147,7 @@ async def admin_cache_func(_, cmu: ChatMemberUpdated):
                 )
             ],
         }
-        log.info(f"Updated admin cache for {cmu.chat.id} [{cmu.chat.title}]")
+        log.info(f"Đã cập nhật bộ đệm quản trị cho {cmu.chat.id} [{cmu.chat.title}]")
 
 
 # Purge Messages
@@ -552,7 +553,7 @@ async def pin(_, message: Message):
 # Mute members
 
 
-@app.on_message(filters.command(["m", "tm"]) & ~filters.private)
+@app.on_message(filters.command(["m", "tm","bm"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def m(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
@@ -574,6 +575,8 @@ async def m(_, message: Message):
         f"{mention}**đã bị cấm chat!**\n"
         f"**cấm chat bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
+    if message.command[0][0] == "bm":
+        await message.reply_to_message.delete()
     if message.command[0] == "tm":
         split = reason.split(None, 1)
         time_value = split[0]
