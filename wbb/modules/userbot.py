@@ -81,7 +81,7 @@ async def executor(client, message: Message):
     if m.reply_to_message:
         r = m.reply_to_message
         if r.reply_markup and isinstance(r.reply_markup, ReplyKeyboardMarkup):
-            return await eor(m, text="INSECURE!")
+            return await eor(m, text="KHÔNG AN TOÀN!")
     status = None
     old_stderr = sys.stderr
     old_stdout = sys.stdout
@@ -97,7 +97,7 @@ async def executor(client, message: Message):
             m,
         )
 
-        text = f"{arrow('')} Pending Task `{task_id}`"
+        text = f"{arrow('')} Nhiệm vụ đang chờ xử lý `{task_id}`"
         if not message.edit_date:
             status = await m.reply(text, quote=True)
 
@@ -158,7 +158,7 @@ async def executor(client, message: Message):
 )
 async def shellrunner(_, message: Message):
     if len(message.command) < 2:
-        return await eor(message, text="**Usage:**\n/sh git pull")
+        return await eor(message, text="**Cách sử dụng:**\n/sh kéo git")
 
     if message.reply_to_message:
         r = message.reply_to_message
@@ -166,7 +166,7 @@ async def shellrunner(_, message: Message):
             r.reply_markup,
             ReplyKeyboardMarkup,
         ):
-            return await eor(message, text="INSECURE!")
+            return await eor(message, text="KHÔNG AN TOÀN!")
 
     text = message.text.split(None, 1)[1]
     if "\n" in text:
@@ -184,7 +184,7 @@ async def shellrunner(_, message: Message):
                 print(err)
                 await eor(
                     message,
-                    text=f"**INPUT:**\n```{escape(text)}```\n\n**ERROR:**\n```{escape(err)}```",
+                    text=f"**INPUT:**\n```{escape(text)}```\n\n**LỖI:**\n```{escape(err)}```",
                 )
             output += f"**{code}**\n"
             output += process.stdout.read()[:-1].decode("utf-8")
@@ -204,7 +204,7 @@ async def shellrunner(_, message: Message):
             errors = traceback.format_exc()
             return await eor(
                 message,
-                text=f"**INPUT:**\n```{escape(text)}```\n\n**ERROR:**\n```{''.join(errors)}```",
+                text=f"**INPUT:**\n```{escape(text)}```\n\n**LỖI:**\n```{''.join(errors)}```",
             )
         output = process.stdout.read()[:-1].decode("utf-8")
     if str(output) == "\n":
@@ -239,16 +239,16 @@ async def shellrunner(_, message: Message):
 )
 async def reserve_channel_handler(_, message: Message):
     if len(message.text.split()) != 2:
-        return await eor(message, text="Pass a username as argument!!")
+        return await eor(message, text="Truyền tên người dùng làm đối số!!")
 
     username = message.text.split(None, 1)[1].strip().replace("@", "")
 
     m = await eor(message, text="Reserving...")
 
-    chat = await app2.create_channel(username, "Created by .reserve command")
+    chat = await app2.create_channel(username, "Được tạo bởi lệnh .reserve")
     try:
         await app2.update_chat_username(chat.id, username)
     except Exception as e:
         await m.edit(f"Couldn't Reserve, Error: `{str(e)}`")
         return await app2.delete_channel(chat.id)
-    await m.edit(f"Reserved @{username} Successfully")
+    await m.edit(f"Đặt trước @{username} thành công")
