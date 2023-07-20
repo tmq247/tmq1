@@ -29,64 +29,63 @@ from wbb import SUDOERS, USERBOT_ID, USERBOT_PREFIX, app2, eor, log, telegraph
 
 __MODULE__ = "Userbot"
 TEXT = """
-<code>alive</code>  →  Send Alive Message.<br>
+<code>alive</code>  →  Gửi tin nhắn còn sống.<br>
 
-<code>create (b|s|c) Title</code>  →  create [basic|super]group & channel<br>
+<code>create (b|s|c) Title</code>  →  tạo nhóm & kênh [basic|super]<br>
 
-<code>chatbot [ENABLE|DISABLE]</code>  →  Enable chatbot in a chat.<br>
+<code>chatbot [ENABLE|DISABLE]</code>  →  Kích hoạt chatbot trong một cuộc trò chuyện.<br>
 
-<code>autocorrect [ENABLE|DISABLE]</code>  →  This will autocorrect your messages on the go.<br>
+<code>autocorrect [ENABLE|DISABLE]</code>  →  Điều này sẽ tự động sửa tin nhắn của bạn khi đang di chuyển.<br>
 
-<code>purgeme [Number of messages to purge]</code>  →  Purge your own messages.<br>
+<code>purgeme [Number of messages to purge]</code>  →  Dọn dẹp tin nhắn của riêng bạn.<br>
 
-<code>eval [Lines of code]</code>  →  Execute Python Code.<br>
+<code>eval [Lines of code]</code>  →  Thực thi mã Python.<br>
 
-<code>lsTasks</code>  →  List running tasks (eval)<br>
+<code>lsTasks</code>  →  Liệt kê các tác vụ đang chạy (eval)<br>
 
-<code>sh [Some shell code]</code>  →  Execute Shell Code.<br>
+<code>sh [Some shell code]</code>  →  Thực thi mã Shell.<br>
 
-<code>approve</code>  →  Approve a user to PM you.<br>
+<code>approve</code>  →  Phê duyệt người dùng để PM bạn.<br>
 
-<code>disapprove</code>  →  Disapprove a user to PM you.<br>
+<code>disapprove</code>  →  Từ chối người dùng PM cho bạn.<br>
 
-<code>block</code>  →  Block a user.<br>
+<code>block</code>  →  Chặn người dùng.<br>
 
-<code>unblock</code>  →  Unblock a user.<br>
+<code>unblock</code>  →  Bỏ chặn người dùng.<br>
 
-<code>anonymize</code>  →  Change Name/PFP Randomly.<br>
+<code>anonymize</code>  →  Thay đổi tên/PFP ngẫu nhiên.<br>
 
-<code>impersonate [User_ID|Username|Reply]</code> → Clone profile of a user.<br>
+<code>impersonate [User_ID|Username|Reply]</code> → Sao chép hồ sơ của người dùng.<br>
 
-<code>useradd</code>  →  To add a user in sudoers. [UNSAFE]<br>
+<code>useradd</code>  →  Để thêm người dùng trong sudoers. [UNSAFE]<br>
 
-<code>userdel</code>  → To remove a user from sudoers.<br>
+<code>userdel</code>  → Để xóa người dùng khỏi sudoers.<br>
 
-<code>sudoers</code>  →  To list sudo users.<br>
+<code>sudoers</code>  →  Để liệt kê người dùng sudo.<br>
 
-<code>download [URL or reply to a file]</code>  →  Download a file from TG or URL<br>
+<code>download [URL or reply to a file]</code>  →  Tải xuống một tệp từTG or URL<br>
 
-<code>upload [URL or File Path]</code>  →  Upload a file from local or URL<br>
+<code>upload [URL or File Path]</code>  →  Tải lên một tập tin từ địa phương hoặc URL<br>
 
-<code>parse_preview [REPLY TO A MESSAGE]</code>  →  Parse a web_page(link) preview<br>
+<code>parse_preview [REPLY TO A MESSAGE]</code>  →  Phân tích bản xem trước web_page(link)<br>
 
-<code>id</code>  →  Same as /id but for Ubot<br>
+<code>id</code>  →  Tương tự như /id nhưng dành cho Ubot<br>
 
-<code>paste</code> → Paste shit on batbin.<br>
-
-<code>help</code> → Get link to this page.<br>
+<code>paste</code> → Dán cứt vào batbin.<br>
+<code>help</code> → Nhận liên kết đến trang này.<br>
 
 <code>kang</code> → Kang stickers.<br>
 
-<code>dice</code> → Roll a dice.<br>
+<code>dice</code> → Lắc xúc xắc.<br>
 """
-log.info("Pasting userbot commands on telegraph")
+log.info("Dán lệnh userbot trên telegraph")
 
 __HELP__ = f"""**Commands:** {telegraph.create_page(
     "Userbot Commands",
     html_content=TEXT,
 )['url']}"""
 
-log.info("Done pasting userbot commands on telegraph")
+log.info("Đã dán xong các lệnh userbot trên telegraph")
 
 
 @app2.on_message(
@@ -115,12 +114,12 @@ async def purge_me_func(_, message: Message):
 
     n = message.text.split(None, 1)[1].strip()
     if not n.isnumeric():
-        return await eor(message, text="Invalid Args")
+        return await eor(message, text="Đối số không hợp lệ")
 
     n = int(n)
 
     if n < 1:
-        return await eor(message, text="Need a number >=1")
+        return await eor(message, text="Cần một số >=1")
 
     chat_id = message.chat.id
 
@@ -134,12 +133,12 @@ async def purge_me_func(_, message: Message):
     ]
 
     if not message_ids:
-        return await eor(message, text="No messages found.")
+        return await eor(message, text="Không tìm thấy thư nào.")
 
-    # A list containing lists of 100 message chunks
-    # because we can't delete more than 100 messages at once,
-    # we have to do it in chunks of 100, i'll choose 99 just
-    # to be safe.
+   # Một danh sách chứa danh sách 100 đoạn tin nhắn
+     # vì chúng tôi không thể xóa hơn 100 tin nhắn cùng lúc,
+     # chúng ta phải làm điều đó theo khối 100, tôi sẽ chỉ chọn 99
+     # để được an toàn.
     to_delete = [message_ids[i : i + 99] for i in range(0, len(message_ids), 99)]
 
     for hundred_messages_or_less in to_delete:
