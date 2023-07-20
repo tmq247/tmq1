@@ -24,13 +24,13 @@ from wbb.utils.rss import Feed
 
 __MODULE__ = "RSS"
 __HELP__ = f"""
-/add_feed [URL] - Add a feed to chat
-/rm_feed - Remove feed from chat
+/add_feed [URL] - Thêm một nguồn cấp dữ liệu để trò chuyện
+/rm_feed - Xóa nguồn cấp dữ liệu khỏi cuộc trò chuyện
 
 **Note:**
-    - This will check for updates every {RSS_DELAY // 60} minutes.
-    - You can only add one feed per chat.
-    - Currently RSS and ATOM feeds are supported.
+    -Điều này sẽ kiểm tra các bản cập nhật {RSS_DELAY // 60} phút một lần.
+     - Bạn chỉ có thể thêm một nguồn cấp dữ liệu cho mỗi cuộc trò chuyện.
+     - Hiện tại nguồn cấp dữ liệu RSS và ATOM được hỗ trợ.
 """
 
 
@@ -82,22 +82,22 @@ loop.create_task(rss_worker())
 @capture_err
 async def add_feed_func(_, m: Message):
     if len(m.command) != 2:
-        return await m.reply("Read 'RSS' section in help menu.")
+        return await m.reply("Đọc 'RSS' phần trong menu trợ giúp.")
     url = m.text.split(None, 1)[1].strip()
 
     if not url:
-        return await m.reply("[ERROR]: Invalid Argument")
+        return await m.reply("[LỖI]: Đối số không hợp lệ")
 
     urls = get_urls_from_text(url)
     if not urls:
-        return await m.reply("[ERROR]: Invalid URL")
+        return await m.reply("[LỖI]: URL không hợp lệ")
 
     url = urls[0]
     status = await get_http_status_code(url)
     if status != 200:
-        return await m.reply("[ERROR]: Invalid Url")
+        return await m.reply("[LỖI]: Url không hợp lệ")
 
-    ns = "[ERROR]: This feed isn't supported."
+    ns = "[LỖI]: Nguồn cấp dữ liệu này không được hỗ trợ."
     try:
         loop = get_event_loop()
         parsed = await loop.run_in_executor(None, parse, url)
@@ -109,7 +109,7 @@ async def add_feed_func(_, m: Message):
 
     chat_id = m.chat.id
     if await is_rss_active(chat_id):
-        return await m.reply("[ERROR]: You already have an RSS feed enabled.")
+        return await m.reply("[LỖI]: Bạn đã bật nguồn cấp dữ liệu RSS.")
     try:
         await m.reply(feed.parsed(), disable_web_page_preview=True)
     except Exception:
@@ -121,6 +121,6 @@ async def add_feed_func(_, m: Message):
 async def rm_feed_func(_, m: Message):
     if await is_rss_active(m.chat.id):
         await remove_rss_feed(m.chat.id)
-        await m.reply("Removed RSS Feed")
+        await m.reply("Nguồn cấp dữ liệu RSS đã bị xóa")
     else:
-        await m.reply("There are no active RSS Feeds in this chat.")
+        await m.reply("Không có Nguồn cấp RSS nào đang hoạt động trong cuộc trò chuyện này.")
