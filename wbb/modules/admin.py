@@ -572,7 +572,7 @@ async def m(_, message: Message):
     mention = (await app.get_users(user_id)).mention
     keyboard = ikb({"🚨  Mở chat  🚨": f"unm_{user_id}"})
     msg = (
-        f"{mention}**đã bị cấm chat!**\n"
+        f"{mention} **đã bị cấm chat!**\n"
         f"**Bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
     if message.command[0][0] == "d":
@@ -603,19 +603,12 @@ async def m(_, message: Message):
     await message.chat.restrict_member(user_id, permissions=ChatPermissions())
     await message.reply_text(msg, reply_markup=keyboard)
 
-#delete
-@app.on_message(filters.command("del") & ~filters.private)
-@adminsOnly("can_delete_messages")
-async def deleteFunc(_, message: Message):
-    if not message.reply_to_message:
-        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
-    await message.reply_to_message.delete()
-    await message.delete()
+
 
 # Unmute members
 
 
-@app.on_message(filters.command("unm","unm_") & ~filters.private)
+@app.on_message(filters.command("unm",) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def unm(_, message: Message):
     user_id = await extract_user(message)
