@@ -38,7 +38,7 @@ async def carbon_func(_, message):
         return await message.reply_text("Trả lời tin nhắn văn bản để tạo carbon.")
     m = await message.reply_text("Điều chế cacbon")
     carbon = await make_carbon(message.reply_to_message.text)
-    await m.edit("Uploading")
+    await m.edit("Đang tải lên")
     await app.send_document(message.chat.id, carbon)
     await m.delete()
     carbon.close()
