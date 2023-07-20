@@ -570,7 +570,7 @@ async def m(_, message: Message):
             "Tôi không thể cấm chat quản trị viên, Bạn biết các quy tắc, tôi cũng vậy."
         )
     mention = (await app.get_users(user_id)).mention
-    keyboard = ikb({"🚨  Mở chat  🚨": f"unm_{user_id}"})
+    keyboard = ikb({"🚨  Mở chat  🚨": f"unm {user_id}"})
     msg = (
         f"{mention}**đã bị cấm chat!**\n"
         f"**Bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
