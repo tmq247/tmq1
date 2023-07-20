@@ -120,7 +120,7 @@ async def block_user_func(_, message):
         return await eor(message, text="Trả lời tin nhắn của người dùng để chặn.")
     user_id = message.reply_to_message.from_user.id
     # Chặn người dùng sau khi chỉnh sửa tin nhắn để người khác có thể nhận được bản cập nhật.
-    await eor(message, text="Successfully blocked the user")
+    await eor(message, text="Đã chặn người dùng thành công")
     await app2.block_user(user_id)
 
 
