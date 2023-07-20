@@ -575,7 +575,7 @@ async def m(_, message: Message):
         f"{mention}**đã bị cấm chat!**\n"
         f"**cấm chat bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
-    if message.command[0][0] == "bm":
+    if message.command[0][0] == "b":
         await message.reply_to_message.delete()
     if message.command[0] == "tm":
         split = reason.split(None, 1)
@@ -603,6 +603,14 @@ async def m(_, message: Message):
     await message.chat.restrict_member(user_id, permissions=ChatPermissions())
     await message.reply_text(msg, reply_markup=keyboard)
 
+#delete
+@app.on_message(filters.command("del") & ~filters.private)
+@adminsOnly("can_delete_messages")
+async def deleteFunc(_, message: Message):
+    if not message.reply_to_message:
+        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
+    await message.reply_to_message.delete()
+    await message.delete()
 
 # Unmute members
 
