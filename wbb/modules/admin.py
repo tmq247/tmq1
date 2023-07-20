@@ -54,16 +54,16 @@ from wbb.utils.functions import (
 )
 
 __MODULE__ = "Admin"
-__HELP__ = """/ban - Cấm người dùng
-/dban - Xóa tin nhắn đã trả lời cấm người gửi tin nhắn đó
-/tban - Cấm người dùng trong thời gian cụ thể
-/unban - Bỏ cấm người dùng
+__HELP__ = """/b - Cấm người dùng
+/db - Xóa tin nhắn đã trả lời cấm người gửi tin nhắn đó
+/tb - Cấm người dùng trong thời gian cụ thể
+/unb - Bỏ cấm người dùng
 /listban - Cấm người dùng khỏi các nhóm được liệt kê trong danh sách
 /listunban - Bỏ cấm người dùng khỏi các nhóm được liệt kê trong danh sách
-/warn - Cảnh báo người dùng
-/dwarn - Xóa tin nhắn đã trả lời cảnh báo người gửi
-/rmwarns - Xóa tất cả cảnh báo của người dùng
-/warns - Hiển thị cảnh báo của người dùng
+/w - Cảnh báo người dùng
+/dw - Xóa tin nhắn đã trả lời cảnh báo người gửi
+/rmws - Xóa tất cả cảnh báo của người dùng
+/ws - Hiển thị cảnh báo của người dùng
 /kick - Đá người dùng
 /dkick - Xóa tin nhắn đã trả lời kick người gửi
 /purge - Xóa tin nhắn
@@ -234,7 +234,7 @@ async def kickFunc(_, message: Message):
 # Ban members
 
 
-@app.on_message(filters.command(["ban", "dban", "tban"]) & ~filters.private)
+@app.on_message(filters.command(["b", "db", "tb"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def banFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message, sender_chat=True)
@@ -269,7 +269,7 @@ async def banFunc(_, message: Message):
     )
     if message.command[0][0] == "d":
         await message.reply_to_message.delete()
-    if message.command[0] == "tban":
+    if message.command[0] == "tb":
         split = reason.split(None, 1)
         time_value = split[0]
         temp_reason = split[1] if len(split) > 1 else ""
@@ -293,7 +293,7 @@ async def banFunc(_, message: Message):
 # Unban members
 
 
-@app.on_message(filters.command("unban") & ~filters.private)
+@app.on_message(filters.command("unb") & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def unban_func(_, message: Message):
     # we don't need reasons for unban, also, we
@@ -652,7 +652,7 @@ async def ban_deleted_accounts(_, message: Message):
         await m.edit("Không có tài khoản nào bị xóa trong cuộc trò chuyện này")
 
 
-@app.on_message(filters.command(["warn", "dwarn"]) & ~filters.private)
+@app.on_message(filters.command(["w", "dw"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def warn_user(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
@@ -700,7 +700,7 @@ async def warn_user(_, message: Message):
         await add_warn(chat_id, await int_to_alpha(user_id), warn)
 
 
-@app.on_callback_query(filters.regex("unwarn_"))
+@app.on_callback_query(filters.regex("unw_"))
 async def remove_warning(_, cq: CallbackQuery):
     from_user = cq.from_user
     chat_id = cq.message.chat.id
@@ -729,7 +729,7 @@ async def remove_warning(_, cq: CallbackQuery):
 # Rmwarns
 
 
-@app.on_message(filters.command("rmwarns") & ~filters.private)
+@app.on_message(filters.command("rmws") & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def remove_warnings(_, message: Message):
     if not message.reply_to_message:
@@ -752,7 +752,7 @@ async def remove_warnings(_, message: Message):
 # Warns
 
 
-@app.on_message(filters.command("warns") & ~filters.private)
+@app.on_message(filters.command("ws") & ~filters.private)
 @capture_err
 async def check_warns(_, message: Message):
     user_id = await extract_user(message)
