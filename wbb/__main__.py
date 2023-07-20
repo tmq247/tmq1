@@ -76,13 +76,13 @@ async def start_bot():
     print("+===============+===============+===============+===============+")
     print(bot_modules)
     print("+===============+===============+===============+===============+")
-    log.info(f"BOT STARTED AS {BOT_NAME}!")
-    log.info(f"USERBOT STARTED AS {USERBOT_NAME}!")
+    log.info(f"BOT BẮT ĐẦU LÀ {BOT_NAME}!")
+    log.info(f"USERBOT BẮT ĐẦU LÀ {USERBOT_NAME}!")
 
     restart_data = await clean_restart_stage()
 
     try:
-        log.info("Sending online status")
+        log.info("Gửi trạng thái trực tuyến")
         if restart_data:
             await app.edit_message_text(
                 restart_data["chat_id"],
@@ -91,19 +91,19 @@ async def start_bot():
             )
 
         else:
-            await app.send_message(LOG_GROUP_ID, "Bot started!")
+            await app.send_message(LOG_GROUP_ID, "Bot bắt đầu!")
     except Exception:
         pass
 
     await idle()
 
     await aiohttpsession.close()
-    log.info("Stopping clients")
+    log.info("Dừng máy khách")
     await app.stop()
-    log.info("Cancelling asyncio tasks")
+    log.info("Hủy tác vụ asyncio")
     for task in asyncio.all_tasks():
         task.cancel()
-    log.info("Dead!")
+    log.info("NGẮT!")
 
 
 home_keyboard_pm = InlineKeyboardMarkup(
@@ -111,13 +111,13 @@ home_keyboard_pm = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(text="Lệnh ❓", callback_data="bot_commands"),
             InlineKeyboardButton(
-                text="Repo 🛠",
-                url="https://github.com/thehamkercat/WilliamButcherBot",
+                text="NHÓM 🛠",
+                url="https://t.me/+EMo0POmEQUhlNzll",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="System Stats 🖥",
+                text="Thống kê hệ thống 🖥",
                 callback_data="stats_callback",
             ),
             InlineKeyboardButton(text="Hỗ trợ 👨", url="http://t.me/coihaycoc"),
@@ -145,8 +145,8 @@ keyboard = InlineKeyboardMarkup(
                 url=f"t.me/{BOT_USERNAME}?start=help",
             ),
             InlineKeyboardButton(
-                text="Repo 🛠",
-                url="https://github.com/thehamkercat/WilliamButcherBot",
+                text="NHÓM 🛠",
+                url="https://t.me/+EMo0POmEQUhlNzll",
             ),
         ],
         [
@@ -154,7 +154,7 @@ keyboard = InlineKeyboardMarkup(
                 text="Thống kê hệ thống 💻",
                 callback_data="stats_callback",
             ),
-            InlineKeyboardButton(text="Support 👨", url="t.me/WBBSupport"),
+            InlineKeyboardButton(text="Hỗ trợ 👨", url="t.me/https://t.me/+EMo0POmEQUhlNzll"),
         ],
     ]
 )
@@ -173,7 +173,7 @@ async def start(_, message):
         elif "_" in name:
             module = name.split("_", 1)[1]
             text = (
-                f"Here is the help for **{HELPABLE[module].__MODULE__}**:\n"
+                f"Đây là sự giúp đỡ cho **{HELPABLE[module].__MODULE__}**:\n"
                 + HELPABLE[module].__HELP__
             )
             await message.reply(text, disable_web_page_preview=True)
