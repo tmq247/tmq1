@@ -9,7 +9,7 @@ from wbb.utils.http import get
 __MODULE__ = "Crypto"
 __HELP__ = """
 /crypto [currency]
-        Get Real Time value from currency given.
+        Nhận giá trị Thời gian thực từ loại tiền được cung cấp.
 """
 
 
@@ -22,10 +22,10 @@ async def crypto(_, message):
     currency = message.text.split(None, 1)[1].lower()
 
     btn = ikb(
-        {"Available Currencies": "https://plotcryptoprice.herokuapp.com"},
+        {"Tiền tệ khả dụng": "https://plotcryptoprice.herokuapp.com"},
     )
 
-    m = await message.reply("`Processing...`")
+    m = await message.reply("`Đang xử lý...`")
 
     try:
         r = await get(
@@ -33,18 +33,18 @@ async def crypto(_, message):
             timeout=5,
         )
     except Exception:
-        return await m.edit("[ERROR]: Something went wrong.")
+        return await m.edit("[LỖI]: Đã xảy ra sự cố.")
 
     if currency not in r:
         return await m.edit(
-            "[ERROR]: INVALID CURRENCY",
+            "[LỖI]: TIỀN TỆ KHÔNG HỢP LỆ",
             reply_markup=btn,
         )
 
     body = {i.upper(): j for i, j in r.get(currency).items()}
 
     text = section(
-        "Current Crypto Rates For " + currency.upper(),
+        "Tỷ giá tiền điện tử hiện tại cho " + currency.upper(),
         body,
     )
     await m.edit(text, reply_markup=btn)
