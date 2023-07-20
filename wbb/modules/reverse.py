@@ -54,7 +54,7 @@ async def get_soup(url: str, headers):
 @capture_err
 async def reverse_image_search(client, message: Message):
     if not message.reply_to_message:
-        return await eor(message, text="Reply to a message to reverse search it.")
+        return await eor(message, text="Trả lời một tin nhắn để đảo ngược tìm kiếm nó.")
     reply = message.reply_to_message
     if (
         not reply.document
@@ -65,7 +65,7 @@ async def reverse_image_search(client, message: Message):
     ):
         return await eor(
             message,
-            text="Reply to an image/document/sticker/animation to reverse search it.",
+            text="Trả lời hình ảnh/tài liệu/nhãn dán/hoạt ảnh để đảo ngược tìm kiếm nó.",
         )
     m = await eor(message, text="Searching...")
     file_id = get_file_id_from_message(reply)
@@ -88,7 +88,7 @@ async def reverse_image_search(client, message: Message):
             location = response.headers.get("Location")
             os.remove(image)
         else:
-            return await m.edit("Something wrong happened.")
+            return await m.edit("Đã xảy ra sự cố.")
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
     }
@@ -97,7 +97,7 @@ async def reverse_image_search(client, message: Message):
         soup = await get_soup(location, headers=headers)
         div = soup.find_all("div", {"class": "r5a77d"})[0]
         text = div.find("a").text
-        text = f"**Result**: [{text}]({location})"
+        text = f"**Kết quả**: [{text}]({location})"
     except Exception:
         return await m.edit(
             f"**Result**: [Link]({location})",
