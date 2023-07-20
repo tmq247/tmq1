@@ -58,8 +58,8 @@ __HELP__ = """/ban - Cấm người dùng
 /dban - Xóa tin nhắn đã trả lời cấm người gửi tin nhắn đó
 /tban - Cấm người dùng trong thời gian cụ thể
 /unban - Bỏ cấm người dùng
-/listban - Cấm người dùng khỏi các nhóm được liệt kê trong tin nhắn
-/listunban - Bỏ cấm người dùng khỏi các nhóm được liệt kê trong thư
+/listban - Cấm người dùng khỏi các nhóm được liệt kê trong danh sách
+/listunban - Bỏ cấm người dùng khỏi các nhóm được liệt kê trong danh sách
 /warn - Cảnh báo người dùng
 /dwarn - Xóa tin nhắn đã trả lời cảnh báo người gửi
 /rmwarns - Xóa tất cả cảnh báo của người dùng
@@ -74,7 +74,7 @@ __HELP__ = """/ban - Cấm người dùng
 /demote - Hạ cấp một thành viên
 /pin - Ghim tin nhắn
 /m - cấm chat người dùng
-/bm - Xóa tin nhắn đã trả lời cấm  chat người gửi tin nhắn đó
+/dm - Xóa tin nhắn đã trả lời cấm  chat người gửi tin nhắn đó
 /tm - cấm chat người dùng trong thời gian cụ thể
 /unm - mở chat người dùng
 /ban_ghosts - Cấm tài khoản đã xóa
@@ -553,7 +553,7 @@ async def pin(_, message: Message):
 # Mute members
 
 
-@app.on_message(filters.command(["m", "tm","bm"]) & ~filters.private)
+@app.on_message(filters.command(["m", "tm","dm"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def m(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
@@ -575,7 +575,7 @@ async def m(_, message: Message):
         f"{mention}**đã bị cấm chat!**\n"
         f"**Bởi:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
-    if message.command[0][0] == "b":
+    if message.command[0][0] == "d":
         await message.reply_to_message.delete()
     if message.command[0] == "tm":
         split = reason.split(None, 1)
