@@ -137,12 +137,12 @@ async def ban_globally(_, message):
         pass
     await m.edit(f"Bị cấm {user.mention} trên toàn cầu!")
     ban_text = f"""
-__**New Global Ban**__
-**Origin:** {message.chat.title} [`{message.chat.id}`]
+__**Lệnh cấm toàn cầu mới**__
+**Nguồn gốc:** {message.chat.title} [`{message.chat.id}`]
 **Admin:** {from_user.mention}
-**Banned User:** {user.mention}
-**Banned User ID:** `{user_id}`
-**Reason:** __{reason}__
+**Người dùng bị cấm:** {user.mention}
+**ID người dùng bị cấm:** `{user_id}`
+**Lý do:** __{reason}__
 **Chats:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
