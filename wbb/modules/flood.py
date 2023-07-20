@@ -104,8 +104,8 @@ async def flood_control_func(_, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        text="🚨  Bật tiếng  🚨",
-                        callback_data=f"Bật tiếng_{user_id}",
+                        text="🚨  Mở chat  🚨",
+                        callback_data=f"Mở chat_{user_id}",
                     )
                 ]
             ]
@@ -142,7 +142,7 @@ async def flood_callback_func(_, cq: CallbackQuery):
     await cq.message.chat.unban_member(user_id)
     text = cq.message.text.markdown
     text = f"~~{text}~~\n\n"
-    text += f"__User unmuted by {from_user.mention}__"
+    text += f"__Người dùng được mở chat bởi{from_user.mention}__"
     await cq.message.edit(text)
 
 
