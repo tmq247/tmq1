@@ -66,7 +66,7 @@ async def take_screenshot(url: str, full: bool = False):
 @capture_err
 async def take_ss(_, message: Message):
     if len(message.command) < 2:
-        return await eor(message, text="Give A Url To Fetch Screenshot.")
+        return await eor(message, text="Cung cấp một url để tìm nạp ảnh chụp màn hình.")
 
     if len(message.command) == 2:
         url = message.text.split(None, 1)[1]
@@ -80,20 +80,20 @@ async def take_ss(_, message: Message):
             "true",
         ]
     else:
-        return await eor(message, text="Invalid Command.")
+        return await eor(message, text="Lệnh không hợp lệ.")
 
-    m = await eor(message, text="Capturing screenshot...")
+    m = await eor(message, text="Chụp ảnh màn hình...")
 
     try:
         photo = await take_screenshot(url, full)
         if not photo:
-            return await m.edit("Failed To Take Screenshot")
+            return await m.edit("Không thể chụp ảnh màn hình")
 
         m = await m.edit("Uploading...")
 
         if not full:
-            # Full size images have problem with reply_photo, that's why
-            # we need to only use reply_photo if we're not using full size
+           # Hình ảnh kích thước đầy đủ có vấn đề với reply_photo, đó là lý do tại sao
+             # chúng tôi chỉ cần sử dụng reply_photo nếu chúng tôi không sử dụng kích thước đầy đủ
             await gather(*[message.reply_document(photo), message.reply_photo(photo)])
         else:
             await message.reply_document(photo)
