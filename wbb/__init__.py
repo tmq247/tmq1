@@ -67,7 +67,7 @@ class Log:
         print(f"[-]: {msg}")
         if self.save_to_file:
             with open(self.file_name, "a") as f:
-                f.write(f"[ERROR]({time.ctime(time.time())}): {msg}\n")
+                f.write(f"[LỖI]({time.ctime(time.time())}): {msg}\n")
 
 
 log = Log(True, "bot.log")
@@ -119,12 +119,12 @@ arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
 app = Client("wbb", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
-log.info("Starting bot client")
+log.info("Bắt đầu máy khách bot")
 app.start()
-log.info("Starting userbot client")
+log.info("Bắt đầu ứng dụng khách userbot")
 app2.start()
 
-log.info("Gathering profile info")
+log.info("Thu thập thông tin hồ sơ")
 x = app.get_me()
 y = app2.get_me()
 
