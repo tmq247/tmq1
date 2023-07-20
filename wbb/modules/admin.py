@@ -678,7 +678,7 @@ async def warn_user(_, message: Message):
     mention = user.mention
     keyboard = ikb({"🚨  Xóa cảnh báo  🚨": f"Xóa cảnh báo_{user_id}"})
     if warns:
-        warns = warns["warns"]
+        warns = warns["ws"]
     else:
         warns = 0
     if message.command[0][0] == "d":
@@ -690,7 +690,7 @@ async def warn_user(_, message: Message):
         )
         await remove_warns(chat_id, await int_to_alpha(user_id))
     else:
-        warn = {"warns": warns + 1}
+        warn = {"ws": warns + 1}
         msg = f"""
 **Người dùng được cảnh báo:** {mention}
 **Cảnh báo bởi:** {message.from_user.mention if message.from_user else 'Anon'}
@@ -715,10 +715,10 @@ async def remove_warning(_, cq: CallbackQuery):
     user_id = cq.data.split("_")[1]
     warns = await get_warn(chat_id, await int_to_alpha(user_id))
     if warns:
-        warns = warns["warns"]
+        warns = warns["ws"]
     if not warns or warns == 0:
         return await cq.answer("Người dùng không có cảnh báo.")
-    warn = {"warns": warns - 1}
+    warn = {"ws": warns - 1}
     await add_warn(chat_id, await int_to_alpha(user_id), warn)
     text = cq.message.text.markdown
     text = f"~~{text}~~\n\n"
@@ -741,7 +741,7 @@ async def remove_warnings(_, message: Message):
     chat_id = message.chat.id
     warns = await get_warn(chat_id, await int_to_alpha(user_id))
     if warns:
-        warns = warns["warns"]
+        warns = warns["ws"]
     if warns == 0 or not warns:
         await message.reply_text(f"{mention}không có cảnh báo.")
     else:
@@ -761,7 +761,7 @@ async def check_warns(_, message: Message):
     warns = await get_warn(message.chat.id, await int_to_alpha(user_id))
     mention = (await app.get_users(user_id)).mention
     if warns:
-        warns = warns["warns"]
+        warns = warns["ws"]
     else:
         return await message.reply_text(f"{mention} không có cảnh báo.")
     return await message.reply_text(f"{mention} có {warns}/3 cảnh báo.")
