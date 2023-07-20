@@ -42,7 +42,7 @@ Parameters:
 
 Bạn chỉ có thể chuyển tham số "tất cả" bằng /lock, không phải bằng /unlock
 
-Example:
+Ví dụ:
     /lock all
 """
 
