@@ -37,7 +37,7 @@ __HELP__ = """/notes Để nhận tất cả các ghi chú trong cuộc trò chu
 
 /save [NOTE_NAME] Để Lưu Ghi chú (Có thể là nhãn dán hoặc văn bản).
 
-#NOTE_NAME To Get A Note.
+#NOTE_NAME Để Nhận Ghi chú.
 
 /delete [NOTE_NAME] Để Xóa Ghi chú.
 
