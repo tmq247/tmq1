@@ -73,7 +73,7 @@ async def paste_func(_, message: Message):
         os.remove(doc)
 
     link = await paste(content)
-    kb = ikb({"Paste Link": link})
+    kb = ikb({"Dán liên kết": link})
     try:
         if m.from_user.is_bot:
             await message.reply_photo(
@@ -85,7 +85,7 @@ async def paste_func(_, message: Message):
             await message.reply_photo(
                 photo=link,
                 quote=False,
-                caption=f"**Paste Link:** [Here]({link})",
+                caption=f"**Dán liên kết:** [Here]({link})",
             )
         await m.delete()
     except Exception:
