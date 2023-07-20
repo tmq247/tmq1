@@ -66,10 +66,10 @@ __HELP__ = """/b - Cấm người dùng
 /ws - Hiển thị cảnh báo của người dùng
 /kick - Đá người dùng
 /dkick - Xóa tin nhắn đã trả lời kick người gửi
-/purge - Xóa tin nhắn
-/purge [n] - Xóa "n" số tin nhắn khỏi tin nhắn đã trả lời
+/p - Xóa tin nhắn
+/p [n] - Xóa "n" số tin nhắn khỏi tin nhắn đã trả lời
 /del - Xóa tin nhắn đã trả lời
-/promote - Quảng bá thành viên
+/promote - Nâng chức thành viên
 /fullpromote - Quảng bá Thành viên Với Tất cả các Quyền
 /demote - Hạ cấp một thành viên
 /pin - Ghim tin nhắn
@@ -153,7 +153,7 @@ async def admin_cache_func(_, cmu: ChatMemberUpdated):
 # Purge Messages
 
 
-@app.on_message(filters.command("purge") & ~filters.private)
+@app.on_message(filters.command("p") & ~filters.private)
 @adminsOnly("can_delete_messages")
 async def purgeFunc(_, message: Message):
     repliedmsg = message.reply_to_message
