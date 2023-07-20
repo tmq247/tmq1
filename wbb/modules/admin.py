@@ -62,7 +62,7 @@ __HELP__ = """/b - Cấm người dùng
 /listunban - Bỏ cấm người dùng khỏi các nhóm được liệt kê trong danh sách
 /w - Cảnh báo người dùng
 /dw - Xóa tin nhắn đã trả lời cảnh báo người gửi
-/rmws - Xóa tất cả cảnh báo của người dùng
+/unw - Xóa tất cả cảnh báo của người dùng
 /ws - Hiển thị cảnh báo của người dùng
 /kick - Đá người dùng
 /dkick - Xóa tin nhắn đã trả lời kick người gửi
@@ -678,7 +678,7 @@ async def warn_user(_, message: Message):
     mention = user.mention
     keyboard = ikb({"🚨  Xóa cảnh báo  🚨": f"Xóa cảnh báo_{user_id}"})
     if warns:
-        warns = warns["ws"]
+        warns = ws["ws"]
     else:
         warns = 0
     if message.command[0][0] == "d":
@@ -690,12 +690,12 @@ async def warn_user(_, message: Message):
         )
         await remove_warns(chat_id, await int_to_alpha(user_id))
     else:
-        warn = {"ws": warns + 1}
+        warn = {"ws": ws + 1}
         msg = f"""
 **Người dùng được cảnh báo:** {mention}
 **Cảnh báo bởi:** {message.from_user.mention if message.from_user else 'Anon'}
-**Lý do:** {reason or 'No Reason Provided.'}
-**Cảnh báo:** {warns + 1}/3"""
+**Lý do:** {reason or 'none.'}
+**Cảnh báo:** {ws + 1}/3"""
         await message.reply_text(msg, reply_markup=keyboard)
         await add_warn(chat_id, await int_to_alpha(user_id), warn)
 
@@ -715,10 +715,10 @@ async def remove_warning(_, cq: CallbackQuery):
     user_id = cq.data.split("_")[1]
     warns = await get_warn(chat_id, await int_to_alpha(user_id))
     if warns:
-        warns = warns["ws"]
+        warns = ws["ws"]
     if not warns or warns == 0:
         return await cq.answer("Người dùng không có cảnh báo.")
-    warn = {"ws": warns - 1}
+    warn = {"ws": ws - 1}
     await add_warn(chat_id, await int_to_alpha(user_id), warn)
     text = cq.message.text.markdown
     text = f"~~{text}~~\n\n"
@@ -729,7 +729,7 @@ async def remove_warning(_, cq: CallbackQuery):
 # Rmwarns
 
 
-@app.on_message(filters.command("rmws") & ~filters.private)
+@app.on_message(filters.command("unw") & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def remove_warnings(_, message: Message):
     if not message.reply_to_message:
@@ -741,7 +741,7 @@ async def remove_warnings(_, message: Message):
     chat_id = message.chat.id
     warns = await get_warn(chat_id, await int_to_alpha(user_id))
     if warns:
-        warns = warns["ws"]
+        warns = ws["ws"]
     if warns == 0 or not warns:
         await message.reply_text(f"{mention}không có cảnh báo.")
     else:
@@ -761,10 +761,10 @@ async def check_warns(_, message: Message):
     warns = await get_warn(message.chat.id, await int_to_alpha(user_id))
     mention = (await app.get_users(user_id)).mention
     if warns:
-        warns = warns["ws"]
+        warns = ws["ws"]
     else:
         return await message.reply_text(f"{mention} không có cảnh báo.")
-    return await message.reply_text(f"{mention} có {warns}/3 cảnh báo.")
+    return await message.reply_text(f"{mention} có {ws}/3 cảnh báo.")
 
 
 # Report
