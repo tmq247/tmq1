@@ -39,9 +39,9 @@ from wbb.utils.pastebin import paste
 
 __MODULE__ = "Music"
 __HELP__ = """
-/ytmusic [link] To Download Music From Various Websites Including Youtube. [SUDOERS]
-/saavn [query] To Download Music From Saavn.
-/lyrics [query] To Get Lyrics Of A Song.
+/ytmusic [link] Để tải nhạc từ các trang web khác nhau, bao gồm cả Youtube. [SUDOERS]
+/saavn [truy vấn] Để Tải Nhạc Từ Saavn.
+/lyrics [truy vấn] Để có được lời bài hát.
 """
 
 is_downloading = False
@@ -81,12 +81,12 @@ def download_youtube_audio(arq_resp):
 async def music(_, message):
     global is_downloading
     if len(message.command) < 2:
-        return await message.reply_text("/ytmusic needs a query as argument")
+        return await message.reply_text("/ytmusic cần một truy vấn làm đối số")
 
     url = message.text.split(None, 1)[1]
     if is_downloading:
         return await message.reply_text(
-            "Another download is in progress, try again after sometime."
+            "Một bản tải xuống khác đang được tiến hành, hãy thử lại sau một lúc."
         )
     is_downloading = True
     m = await message.reply_text(f"Downloading {url}", disable_web_page_preview=True)
@@ -98,7 +98,7 @@ async def music(_, message):
         )
 
         if not music:
-            return await message.reply_text("[ERROR]: MUSIC TOO LONG")
+            return await message.reply_text("[LỖI]: NHẠC QUÁ DÀI")
         (
             title,
             performer,
@@ -139,10 +139,10 @@ async def download_song(url):
 async def jssong(_, message):
     global is_downloading
     if len(message.command) < 2:
-        return await message.reply_text("/saavn requires an argument.")
+        return await message.reply_text("/saavn yêu cầu một đối số.")
     if is_downloading:
         return await message.reply_text(
-            "Another download is in progress, try again after sometime."
+            "Một bản tải xuống khác đang được tiến hành, hãy thử lại sau một lúc."
         )
     is_downloading = True
     text = message.text.split(None, 1)[1]
@@ -180,14 +180,14 @@ async def jssong(_, message):
 @app.on_message(filters.command("lyrics"))
 async def lyrics_func(_, message):
     if len(message.command) < 2:
-        return await message.reply_text("**Usage:**\n/lyrics [QUERY]")
+        return await message.reply_text("**Cách sử dụng:**\n/lyrics [TRUY VẤN]")
     m = await message.reply_text("**Searching**")
     query = message.text.strip().split(None, 1)[1]
 
     resp = await arq.lyrics(query)
 
     if not (resp.ok and resp.result):
-        return await m.edit("No lyrics found.")
+        return await m.edit("Không tìm thấy lời bài hát.")
 
     song = resp.result[0]
     song_name = song["song"]
