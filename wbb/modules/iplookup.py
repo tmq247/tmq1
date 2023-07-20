@@ -9,22 +9,22 @@ from wbb.utils import http
 # For /help menu
 __MODULE__ = "iplookup"
 __HELP__ = """
-/iplookup [ip address] to get the details about that ip
+/iplookup [ip address] để có được thông tin chi tiết về ip đó
 """
 
 
 @app.on_message(filters.command("iplookup"))
 async def ip_lookup(_, message: Message):
     if len(message.command) < 2:
-        return await message.reply_text("ip address is missing")
+        return await message.reply_text("địa chỉ ip bị thiếu")
     ip_address = message.command[1]
-    msg = await message.reply_text("checking ip address...")
+    msg = await message.reply_text("kiểm tra địa chỉ ip...")
     try:
         res = await http.get(f"https://ipinfo.io/{ip_address}/json", timeout=5)
     except asyncio.TimeoutError:
-        return await message.reply_text("request timeout")
+        return await message.reply_text("hết thời gian yêu cầu")
     except Exception as e:
-        return await message.reply_text(f"ERROR: `{e}`")
+        return await message.reply_text(f"LỖI: `{e}`")
     hostname = res.get("hostname", "N/A")
     city = res.get("city", "N/A")
     region = res.get("region", "N/A")
