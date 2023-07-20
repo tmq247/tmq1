@@ -62,7 +62,7 @@ async def clean_db(_, message):
         except Exception:
             await remove_served_chat(served_chat)
             served_chats.remove(served_chat)
-    await m.edit("**Database Cleaned.**")
+    await m.edit("**Đã làm sạch cơ sở dữ liệu.**")
 
 
 async def get_total_users_count():
@@ -74,7 +74,7 @@ async def get_total_users_count():
             count = await app.get_chat_members_count(chat_id)
             total_count += count
         except Exception:
-            print(f"Error fetching members count for chat: {chat_id}")
+            print(f"Lỗi khi tìm nạp số lượng thành viên cho cuộc trò chuyện: {chat_id}")
     return total_count
 
 
@@ -83,7 +83,7 @@ async def get_total_users_count():
 async def global_stats(_, message):
     m = await app.send_message(
         message.chat.id,
-        text="__**Analysing Stats...**__",
+        text="__**Phân tích số liệu thống kê...**__",
         disable_web_page_preview=True,
     )
 
@@ -118,8 +118,8 @@ async def global_stats(_, message):
     karmas_chats_count = _karmas["chats_count"]
 
     # Contributors/Developers count and commits on github
-    url = "https://api.github.com/repos/thehamkercat/williambutcherbot/contributors"
-    rurl = "https://github.com/thehamkercat/williambutcherbot"
+    url = "@coihaycoc"
+    rurl = "@coihaycoc"
     developers = await get(url)
     commits = 0
     for developer in developers:
