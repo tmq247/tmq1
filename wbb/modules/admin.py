@@ -616,7 +616,7 @@ async def unm(_, message: Message):
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     await message.chat.unban_member(user_id)
     umention = (await app.get_users(user_id)).mention
-    await message.reply_text(f"Mở chat cho! {umention}")
+    await message.reply_text(f"{umention} đã có thể gáy lại! ")
 
 
 # Ban deleted accounts
