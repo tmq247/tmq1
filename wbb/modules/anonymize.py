@@ -45,7 +45,7 @@ from wbb.utils.functions import extract_user
     & SUDOERS
 )
 async def change_profile(_, message: Message):
-    m = await eor(message, text="Anonymizing...")
+    m = await eor(message, text="Đang ẩn danh...")
     try:
         image_resp, name_resp = await gather(
             session.get("https://thispersondoesnotexist.com/image"),
@@ -65,7 +65,7 @@ async def change_profile(_, message: Message):
         e = format_exc()
         err = await app.send_message(LOG_GROUP_ID, text=f"`{e}`")
         return await m.edit(f"**Lỗi**: {err.link}")
-    await m.edit(f"[Anonymized.](tg://user?id={USERBOT_ID})")
+    await m.edit(f"[Ẩn danh.](tg://user?id={USERBOT_ID})")
     image.close()
 
 
@@ -99,6 +99,6 @@ async def impersonate(_, message: Message):
     except Exception as e:
         e = format_exc()
         err = await app.send_message(LOG_GROUP_ID, text=f"`{e}`")
-        return await m.edit(f"**Error**: {err.link}")
+        return await m.edit(f"**Lỗi**: {err.link}")
 
-    await m.edit(f"[Done](tg://user?id={USERBOT_ID})")
+    await m.edit(f"[Xong](tg://user?id={USERBOT_ID})")
