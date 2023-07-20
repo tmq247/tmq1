@@ -119,7 +119,7 @@ async def callback_query_ignore_rice(_, callback_query):
     if u_disprover.id == u_op.id:
         await callback_query.answer("Ok, gạo này sẽ không được chuyển tiếp")
     elif disprover_status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-        await m_op.reply_text(f"{u_disprover.mention} ignored this rice")
+        await m_op.reply_text(f"{u_disprover.mention} bỏ qua gạo này")
     else:
         return await callback_query.answer("Chỉ quản trị viên hoặc OP mới có thể bỏ qua nó")
     await callback_query.message.delete()
