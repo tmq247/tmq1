@@ -33,7 +33,7 @@ from wbb.core.decorators.errors import capture_err
 __MODULE__ = "Quotly"
 __HELP__ = """
 /q - Để trích dẫn một tin nhắn.
-/q [INTEGER] - Để trích dẫn nhiều hơn 1 tin nhắn.
+/q [số nguyên] - Để trích dẫn nhiều hơn 1 tin nhắn.
 /q r - để trích dẫn một tin nhắn với nó trả lời
 
 Sử dụng .q để báo giá bằng userbot
@@ -107,7 +107,7 @@ async def quotly_func(client, message: Message):
         else:
             if getArg(message) != "r":
                 return await m.edit(
-                    "Incorrect Argument, Pass **'r'** or **'INT'**, **EX:** __/q 2__"
+                    "Đối số sai, Pass **'r'** or **'INT'**, **EX:** __/q 2__"
                 )
             reply_message = await client.get_messages(
                 message.chat.id,
