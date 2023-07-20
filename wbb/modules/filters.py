@@ -39,7 +39,7 @@ from wbb.utils.filter_groups import chat_filters_group
 from wbb.utils.functions import extract_text_and_keyb
 
 __MODULE__ = "Filters"
-__HELP__ = """/bộ lọc để có được tất cả các bộ lọc trong cuộc trò chuyện.
+__HELP__ = """/filter để có được tất cả các bộ lọc trong cuộc trò chuyện.
 /filter [FILTER_NAME] Để lưu bộ lọc (Có thể là nhãn dán hoặc văn bản).
 /stop [FILTER_NAME] Dừng một bộ lọc.
 
@@ -63,7 +63,7 @@ async def save_filters(_, message):
         )
     name = message.text.split(None, 1)[1].strip()
     if not name:
-        return await message.reply_text("**Cách sử dụng:**\n__/bộ lọc [FILTER_NAME]__")
+        return await message.reply_text("**Cách sử dụng:**\n__/filter [FILTER_NAME]__")
     chat_id = message.chat.id
     _type = "text" if message.reply_to_message.text else "sticker"
     _filter = {
@@ -83,7 +83,7 @@ async def get_filterss(_, message):
     if not _filters:
         return await message.reply_text("**Không có bộ lọc nào trong cuộc trò chuyện này.**")
     _filters.sort()
-    msg = f"List of filters in {message.chat.title} :\n"
+    msg = f"Danh sách các bộ lọc trong{message.chat.title} :\n"
     for _filter in _filters:
         msg += f"**-** `{_filter}`\n"
     await message.reply_text(msg)
