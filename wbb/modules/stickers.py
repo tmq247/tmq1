@@ -115,7 +115,7 @@ async def userbot_kang(_, message: Message):
     reply = message.reply_to_message
 
     if not reply:
-        return await message.reply_text("Reply to a sticker/image to kang it.")
+        return await message.reply_text("Trả lời nhãn dán/hình ảnh cho kang it.")
 
     sticker_m = await reply.forward(BOT_USERNAME)
 
@@ -175,7 +175,7 @@ async def kang(client, message: Message):
             temp_file_path = await app.download_media(doc)
             image_type = imghdr.what(temp_file_path)
             if image_type not in SUPPORTED_TYPES:
-                return await msg.edit("Format not supported! ({})".format(image_type))
+                return await msg.edit("Định dạng không được hỗ trợ! ({})".format(image_type))
             try:
                 temp_file_path = await resize_file_to_sticker_size(temp_file_path)
             except OSError as e:
