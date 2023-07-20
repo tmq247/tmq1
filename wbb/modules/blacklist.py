@@ -50,10 +50,10 @@ __HELP__ = """
 @adminsOnly("can_restrict_members")
 async def save_filters(_, message):
     if len(message.command) < 2:
-        return await message.reply_text("Cách sử dụng:\n/danh sách đen [WORD|SENTENCE]")
+        return await message.reply_text("Cách sử dụng:\n/blacklist [WORD|SENTENCE]")
     word = message.text.split(None, 1)[1].strip()
     if not word:
-        return await message.reply_text("**Cách sử dụng**\n__/danh sách đen [WORD|SENTENCE]__")
+        return await message.reply_text("**Cách sử dụng**\n__/blacklist [WORD|SENTENCE]__")
     chat_id = message.chat.id
     await save_blacklist_filter(chat_id, word)
     await message.reply_text(f"__**Danh sách đen {word}.**__")
@@ -66,7 +66,7 @@ async def get_filterss(_, message):
     if not data:
         await message.reply_text("**Không có từ nào trong danh sách đen trong cuộc trò chuyện này.**")
     else:
-        msg = f"List of blacklisted words in {message.chat.title} :\n"
+        msg = f"Danh sách các từ bị cấm trong {message.chat.title} :\n"
         for word in data:
             msg += f"**-** `{word}`\n"
         await message.reply_text(msg)
@@ -76,10 +76,10 @@ async def get_filterss(_, message):
 @adminsOnly("can_restrict_members")
 async def del_filter(_, message):
     if len(message.command) < 2:
-        return await message.reply_text("Cách sử dụng:\n/danh sách trắng [WORD|SENTENCE]")
+        return await message.reply_text("Cách sử dụng:\n/whitelist [WORD|SENTENCE]")
     word = message.text.split(None, 1)[1].strip()
     if not word:
-        return await message.reply_text("Cách sử dụng:\n/danh sách trắng [WORD|SENTENCE]")
+        return await message.reply_text("Cách sử dụng:\n/whitelist [WORD|SENTENCE]")
     chat_id = message.chat.id
     deleted = await delete_blacklist_filter(chat_id, word)
     if deleted:
@@ -116,5 +116,5 @@ async def blacklist_filters_re(_, message):
             return await app.send_message(
                 chat_id,
                 f"Đã tắt tiếng {user.mention} [`{user.id}`] trong 1 giờ "
-                + f"do phù hợp với từ {word} trong danh sách đen  .",
+                + f"do trùng khớp với từ {word} trong danh sách đen  .",
             )
