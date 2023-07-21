@@ -41,6 +41,7 @@ karmadb = db.karma
 chatsdb = db.chats
 usersdb = db.users
 gbansdb = db.gban
+fmutesdb = db.fmute
 coupledb = db.couple
 captchadb = db.captcha
 solved_captcha_db = db.solved_captcha
