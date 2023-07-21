@@ -55,7 +55,6 @@ from wbb.utils.dbfunctions import (
     has_solved_captcha_once,
     is_captcha_on,
     is_gbanned_user,
-    is_fmuted_user,
     save_captcha_solved,
     set_welcome,
     update_captcha_cache,
@@ -132,14 +131,6 @@ async def welcome(_, message: Message):
                      + " đối với lệnh cấm này trong trò chuyện hỗ trợ."    
                 )
                 continue
-            if await is_fmuted_user(member.id):
-                await message.chat.m_member(member.id)
-                await message.reply_text(
-                    f"{member.mention} đã bị cấm chat toàn hệ thống,"
-                     + " nếu bạn cho rằng đây là nhầm lẫn, bạn có thể khiếu nại"
-                     + " đối với lệnh cấm này trong trò chuyện hỗ trợ."    
-                )
-                continue    
 
             if member.is_bot:
                 continue  # ignore bots
