@@ -129,9 +129,17 @@ async def welcome(_, message: Message):
                 await message.reply_text(
                     f"{member.mention} đã bị cấm trên toàn cầu và đã bị xóa,"
                      + " nếu bạn cho rằng đây là gban giả, bạn có thể khiếu nại"
-                     + " đối với lệnh cấm này trong trò chuyện hỗ trợ."
+                     + " đối với lệnh cấm này trong trò chuyện hỗ trợ."    
                 )
                 continue
+            if await is_fmuted_user(member.id):
+                await message.chat.m_member(member.id)
+                await message.reply_text(
+                    f"{member.mention} đã bị cấm chat toàn hệ thống,"
+                     + " nếu bạn cho rằng đây là nhầm lẫn, bạn có thể khiếu nại"
+                     + " đối với lệnh cấm này trong trò chuyện hỗ trợ."    
+                )
+                continue    
 
             if member.is_bot:
                 continue  # ignore bots
