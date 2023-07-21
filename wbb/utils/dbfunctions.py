@@ -393,6 +393,31 @@ async def remove_gban_user(user_id: int):
     return await gbansdb.delete_one({"user_id": user_id})
 
 
+async def get_fmutes_count() -> int:
+    return len([i async for i in fmutesdb.find({"user_id": {"$gt": 0}})])
+
+
+async def is_fmuted_user(user_id: int) -> bool:
+    user = await fmutesdb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+
+
+async def add_gban_user(user_id: int):
+    is_fmuted = await is_fmuted_user(user_id)
+    if is_fmuted:
+        return
+    return await fmutesdb.insert_one({"user_id": user_id})
+
+
+async def remove_fmute_user(user_id: int):
+    is_fmuted = await is_fmuted_user(user_id)
+    if not is_fmuted:
+        return
+    return await fmutesdb.delete_one({"user_id": user_id})
+
+
 async def _get_lovers(chat_id: int):
     lovers = await coupledb.find_one({"chat_id": chat_id})
     if not lovers:
