@@ -55,6 +55,7 @@ from wbb.utils.dbfunctions import (
     has_solved_captcha_once,
     is_captcha_on,
     is_gbanned_user,
+    is_fmuted_user,
     save_captcha_solved,
     set_welcome,
     update_captcha_cache,
